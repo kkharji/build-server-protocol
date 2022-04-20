@@ -1,4 +1,4 @@
-use crate::BspBuildTargetIdentifier;
+use crate::BuildTargetIdentifier;
 use serde::{Deserialize, Serialize};
 /// The build target resources request is sent from the client to the server to query for the list
 /// of resources of a given list of build targets.
@@ -9,71 +9,71 @@ use serde::{Deserialize, Serialize};
 ///
 /// This request can be used by a client to highlight the resources in a project view, for example.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BspResourcesParams {
-    targets: Vec<BspBuildTargetIdentifier>,
+pub struct BTResourcesParams {
+    targets: Vec<BuildTargetIdentifier>,
 }
 
-impl BspResourcesParams {
-    pub fn new(targets: Vec<BspBuildTargetIdentifier>) -> Self {
+impl BTResourcesParams {
+    pub fn new(targets: Vec<BuildTargetIdentifier>) -> Self {
         Self { targets }
     }
 
     /// Get a reference to the resources params's targets.
-    pub fn targets(&self) -> &[BspBuildTargetIdentifier] {
+    pub fn targets(&self) -> &[BuildTargetIdentifier] {
         self.targets.as_ref()
     }
 
     /// Set the resources params's targets.
-    pub fn set_targets(&mut self, targets: Vec<BspBuildTargetIdentifier>) {
+    pub fn set_targets(&mut self, targets: Vec<BuildTargetIdentifier>) {
         self.targets = targets;
     }
 
     /// Get a mutable reference to the resources params's targets.
-    pub fn targets_mut(&mut self) -> &mut Vec<BspBuildTargetIdentifier> {
+    pub fn targets_mut(&mut self) -> &mut Vec<BuildTargetIdentifier> {
         &mut self.targets
     }
 }
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BspResourcesResult {
-    items: Vec<BspResourcesItem>,
+pub struct BTResourcesResult {
+    items: Vec<BTResourcesItem>,
 }
 
-impl BspResourcesResult {
-    pub fn new(items: Vec<BspResourcesItem>) -> Self {
+impl BTResourcesResult {
+    pub fn new(items: Vec<BTResourcesItem>) -> Self {
         Self { items }
     }
 
     /// Get a reference to the bsp resources result's items.
-    pub fn items(&self) -> &[BspResourcesItem] {
+    pub fn items(&self) -> &[BTResourcesItem] {
         self.items.as_ref()
     }
 
     /// Get a mutable reference to the bsp resources result's items.
-    pub fn items_mut(&mut self) -> &mut Vec<BspResourcesItem> {
+    pub fn items_mut(&mut self) -> &mut Vec<BTResourcesItem> {
         &mut self.items
     }
 }
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BspResourcesItem {
-    target: BspBuildTargetIdentifier,
+pub struct BTResourcesItem {
+    target: BuildTargetIdentifier,
     /// List of resource files.
     resources: Vec<String>,
 }
 
-impl BspResourcesItem {
-    pub fn new(target: BspBuildTargetIdentifier, resources: Vec<String>) -> Self {
+impl BTResourcesItem {
+    pub fn new(target: BuildTargetIdentifier, resources: Vec<String>) -> Self {
         Self { target, resources }
     }
 
     /// Set the bsp resources item's target.
-    pub fn set_target(&mut self, target: BspBuildTargetIdentifier) {
+    pub fn set_target(&mut self, target: BuildTargetIdentifier) {
         self.target = target;
     }
 
     /// Get a reference to the bsp resources item's target.
-    pub fn target(&self) -> &BspBuildTargetIdentifier {
+    pub fn target(&self) -> &BuildTargetIdentifier {
         &self.target
     }
 

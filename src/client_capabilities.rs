@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Default, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
-pub struct BspClientCapabilities {
+pub struct ClientCapabilities {
     /// The languages that this client supports.
     /// The ID strings for each language is defined in the LSP.
     /// The server must never respond with build targets for other
@@ -10,7 +10,7 @@ pub struct BspClientCapabilities {
     language_ids: Vec<String>,
 }
 
-impl BspClientCapabilities {
+impl ClientCapabilities {
     pub fn new(language_ids: Vec<String>) -> Self {
         Self { language_ids }
     }

@@ -1,10 +1,10 @@
 use crate::providers::*;
 use serde::{Deserialize, Serialize};
 
-/// Bsp Server Capabilities
+/// Server Capabilities
 #[derive(Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct BspServerCapabilities {
+pub struct ServerCapabilities {
     /// The languages the server supports compilation
     /// via method "buildTarget/compile".
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -56,7 +56,7 @@ pub struct BspServerCapabilities {
     build_target_changed_provider: Option<bool>,
 }
 
-impl BspServerCapabilities {
+impl ServerCapabilities {
     /// Set the bsp server capabilities's compile provider.
     pub fn set_compile_provider(&mut self, compile_provider: Option<CompileProvider>) {
         self.compile_provider = compile_provider;

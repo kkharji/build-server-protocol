@@ -1,7 +1,7 @@
 use lsp_types::TextDocumentIdentifier;
 use serde::{Deserialize, Serialize};
 
-use crate::BspBuildTargetIdentifier;
+use crate::BuildTargetIdentifier;
 
 /// The inverse sources request is sent from the client to the server to query for the list of
 /// build targets containing a text document. The server communicates during the initialize
@@ -9,11 +9,11 @@ use crate::BspBuildTargetIdentifier;
 /// buildTarget/sources, except it only works for text documents and not directories.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
-pub struct BspInverseSourcesParams {
+pub struct BTInverseSourcesParams {
     text_document: TextDocumentIdentifier,
 }
 
-impl BspInverseSourcesParams {
+impl BTInverseSourcesParams {
     pub fn new(text_document: TextDocumentIdentifier) -> Self {
         Self { text_document }
     }
@@ -30,6 +30,6 @@ impl BspInverseSourcesParams {
 }
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BspInverseSourcesResult {
-    targets: Vec<BspBuildTargetIdentifier>,
+pub struct BTInverseSourcesResult {
+    targets: Vec<BuildTargetIdentifier>,
 }

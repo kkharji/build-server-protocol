@@ -1,4 +1,4 @@
-use crate::BspBuildTargetIdentifier;
+use crate::BuildTargetIdentifier;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -6,9 +6,9 @@ use serde_json::Value;
 /// launches a Microsoft DAP server and returns a connection URI for the client to interact with.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
-pub struct BspDebugSessionParams {
+pub struct DebugSessionStartParams {
     /// A sequence of build targets affected by the debugging action.
-    targets: Vec<BspBuildTargetIdentifier>,
+    targets: Vec<BuildTargetIdentifier>,
 
     /// The kind of data to expect in the `data` field.
     data_kind: String,
@@ -18,8 +18,8 @@ pub struct BspDebugSessionParams {
     data: Value,
 }
 
-impl BspDebugSessionParams {
-    pub fn new(targets: Vec<BspBuildTargetIdentifier>, data_kind: String, data: Value) -> Self {
+impl DebugSessionStartParams {
+    pub fn new(targets: Vec<BuildTargetIdentifier>, data_kind: String, data: Value) -> Self {
         Self {
             targets,
             data_kind,
@@ -28,7 +28,7 @@ impl BspDebugSessionParams {
     }
 
     /// Get a reference to the debug session params's targets.
-    pub fn targets(&self) -> &[BspBuildTargetIdentifier] {
+    pub fn targets(&self) -> &[BuildTargetIdentifier] {
         self.targets.as_ref()
     }
 
@@ -43,7 +43,7 @@ impl BspDebugSessionParams {
     }
 
     /// Set the debug session params's targets.
-    pub fn set_targets(&mut self, targets: Vec<BspBuildTargetIdentifier>) {
+    pub fn set_targets(&mut self, targets: Vec<BuildTargetIdentifier>) {
         self.targets = targets;
     }
 
@@ -59,7 +59,7 @@ impl BspDebugSessionParams {
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BspDebugSessionAddress {
+pub struct DebugSessionStartResult {
     /** The Debug Adapter Protocol server's connection uri */
     uri: String,
 }

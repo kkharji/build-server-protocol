@@ -1,4 +1,4 @@
-use crate::BspBuildTargetIdentifier;
+use crate::BuildTargetIdentifier;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -6,19 +6,19 @@ use serde_json::Value;
 /// the libraries of build target dependencies that are external to the workspace including meta
 /// information about library and their sources. It's an extended version of buildTarget/sources.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BspBTDependencyModulesParams {
+pub struct BTDependencyModulesParams {
     /// The build targets to clean.
-    targets: Vec<BspBuildTargetIdentifier>,
+    targets: Vec<BuildTargetIdentifier>,
 }
 
-impl BspBTDependencyModulesParams {
+impl BTDependencyModulesParams {
     /// Get a reference to the bsp btclean cache params's targets.
-    pub fn targets(&self) -> &[BspBuildTargetIdentifier] {
+    pub fn targets(&self) -> &[BuildTargetIdentifier] {
         self.targets.as_ref()
     }
 
     /// Get a mutable reference to the bsp btclean cache params's targets.
-    pub fn targets_mut(&mut self) -> &mut Vec<BspBuildTargetIdentifier> {
+    pub fn targets_mut(&mut self) -> &mut Vec<BuildTargetIdentifier> {
         &mut self.targets
     }
 
@@ -27,62 +27,62 @@ impl BspBTDependencyModulesParams {
     }
 
     /// Set the bsp btclean cache params's targets.
-    pub fn set_targets(&mut self, targets: Vec<BspBuildTargetIdentifier>) {
+    pub fn set_targets(&mut self, targets: Vec<BuildTargetIdentifier>) {
         self.targets = targets;
     }
 }
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BspBTDependencyModulesResult {
-    items: Vec<BspBTDependencyModulesItem>,
+pub struct BTDependencyModulesResult {
+    items: Vec<BTDependencyModulesItem>,
 }
 
-impl BspBTDependencyModulesResult {
-    pub fn new(items: Vec<BspBTDependencyModulesItem>) -> Self {
+impl BTDependencyModulesResult {
+    pub fn new(items: Vec<BTDependencyModulesItem>) -> Self {
         Self { items }
     }
 
     /// Get a reference to the bsp btdependency modules result's items.
-    pub fn items(&self) -> &[BspBTDependencyModulesItem] {
+    pub fn items(&self) -> &[BTDependencyModulesItem] {
         self.items.as_ref()
     }
 
     /// Get a mutable reference to the bsp btdependency modules result's items.
-    pub fn items_mut(&mut self) -> &mut Vec<BspBTDependencyModulesItem> {
+    pub fn items_mut(&mut self) -> &mut Vec<BTDependencyModulesItem> {
         &mut self.items
     }
 }
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BspBTDependencyModulesItem {
-    target: BspBuildTargetIdentifier,
-    modules: Vec<BspBTDependencyModule>,
+pub struct BTDependencyModulesItem {
+    target: BuildTargetIdentifier,
+    modules: Vec<BTDependencyModule>,
 }
 
-impl BspBTDependencyModulesItem {
-    pub fn new(target: BspBuildTargetIdentifier, modules: Vec<BspBTDependencyModule>) -> Self {
+impl BTDependencyModulesItem {
+    pub fn new(target: BuildTargetIdentifier, modules: Vec<BTDependencyModule>) -> Self {
         Self { target, modules }
     }
 
     /// Get a reference to the bsp btdependency modules item's target.
-    pub fn target(&self) -> &BspBuildTargetIdentifier {
+    pub fn target(&self) -> &BuildTargetIdentifier {
         &self.target
     }
 
     /// Set the bsp btdependency modules item's modules.
-    pub fn set_modules(&mut self, modules: Vec<BspBTDependencyModule>) {
+    pub fn set_modules(&mut self, modules: Vec<BTDependencyModule>) {
         self.modules = modules;
     }
 
     /// Get a reference to the bsp btdependency modules item's modules.
-    pub fn modules(&self) -> &[BspBTDependencyModule] {
+    pub fn modules(&self) -> &[BTDependencyModule] {
         self.modules.as_ref()
     }
 }
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
-pub struct BspBTDependencyModule {
+pub struct BTDependencyModule {
     /// Module name
     name: String,
 
@@ -97,7 +97,7 @@ pub struct BspBTDependencyModule {
     data: Option<Value>,
 }
 
-impl BspBTDependencyModule {
+impl BTDependencyModule {
     pub fn new(
         name: String,
         version: String,

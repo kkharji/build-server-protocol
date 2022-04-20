@@ -1,4 +1,4 @@
-use super::BspBuildTargetIdentifier;
+use super::BuildTargetIdentifier;
 use serde::{Deserialize, Serialize};
 
 /// The build target changed notification is sent from the server to the client
@@ -16,7 +16,7 @@ impl BuildTargetsChangedNotification {
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct BuildTargetEvent {
     /// The identifier for the changed build target.
-    pub target: BspBuildTargetIdentifier,
+    pub target: BuildTargetIdentifier,
     /// The kind of change for this build target.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kind: Option<BuildTargetEventKind>,
@@ -27,13 +27,13 @@ pub struct BuildTargetEvent {
 
 impl BuildTargetEvent {
     pub fn new(
-        target: BspBuildTargetIdentifier,
+        target: BuildTargetIdentifier,
         kind: Option<BuildTargetEventKind>,
         data: Option<serde_json::Value>,
     ) -> Self {
         Self { target, kind, data }
     }
-    pub fn new_simple(target: BspBuildTargetIdentifier) -> Self {
+    pub fn new_simple(target: BuildTargetIdentifier) -> Self {
         Self {
             target,
             ..Default::default()

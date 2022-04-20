@@ -1,4 +1,4 @@
-use crate::BspBuildTargetIdentifier;
+use crate::BuildTargetIdentifier;
 use lsp_types::TextDocumentIdentifier;
 use serde::{Deserialize, Serialize};
 
@@ -12,11 +12,11 @@ use serde::{Deserialize, Serialize};
 /// to definition" from project sources to dependency sources.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
-pub struct BspDependencySourcesParams {
+pub struct BTDependencySourcesParams {
     text_document: TextDocumentIdentifier,
 }
 
-impl BspDependencySourcesParams {
+impl BTDependencySourcesParams {
     pub fn new(text_document: TextDocumentIdentifier) -> Self {
         Self { text_document }
     }
@@ -33,13 +33,13 @@ impl BspDependencySourcesParams {
 }
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BspDependencySourcesResult {
+pub struct BTDependencySourcesResult {
     items: Vec<DependencySourcesItem>,
 }
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DependencySourcesItem {
-    target: BspBuildTargetIdentifier,
+    target: BuildTargetIdentifier,
     /// List of resources containing source files of the
     ///    * target's dependencies.
     ///    * Can be source files, jar files, zip files, or directories.
@@ -57,12 +57,12 @@ impl DependencySourcesItem {
     }
 
     /// Get a reference to the dependency sources item's target.
-    pub fn target(&self) -> &BspBuildTargetIdentifier {
+    pub fn target(&self) -> &BuildTargetIdentifier {
         &self.target
     }
 
     /// Set the dependency sources item's target.
-    pub fn set_target(&mut self, target: BspBuildTargetIdentifier) {
+    pub fn set_target(&mut self, target: BuildTargetIdentifier) {
         self.target = target;
     }
 

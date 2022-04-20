@@ -1,11 +1,11 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BspBuildTargetIdentifier {
+pub struct BuildTargetIdentifier {
     uri: String,
 }
 
-impl BspBuildTargetIdentifier {
+impl BuildTargetIdentifier {
     pub fn new(uri: String) -> Self {
         Self { uri }
     }

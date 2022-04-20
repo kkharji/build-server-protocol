@@ -1,4 +1,4 @@
-use crate::BspClientCapabilities;
+use crate::ClientCapabilities;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -16,7 +16,7 @@ use serde_json::Value;
 ///
 /// Until the server has responded to the initialize request with an [`InitializeBuildResult`], the
 /// client must not send any additional requests or notifications to the server.
-pub struct BspInitializeBuildParams {
+pub struct InitializeBuildParams {
     /// Name of the client
     display_name: String,
     /// The version of the client
@@ -26,19 +26,19 @@ pub struct BspInitializeBuildParams {
     /// The rootUri of the workspace
     root_uri: String,
     /// The capabilities of the client
-    capabilities: BspClientCapabilities,
+    capabilities: ClientCapabilities,
     /// Additional metadata about the client
     #[serde(skip_serializing_if = "Option::is_none")]
     data: Option<Value>,
 }
 
-impl BspInitializeBuildParams {
+impl InitializeBuildParams {
     pub fn new(
         display_name: String,
         version: String,
         bsp_version: String,
         root_uri: String,
-        capabilities: BspClientCapabilities,
+        capabilities: ClientCapabilities,
         data: Option<Value>,
     ) -> Self {
         Self {
@@ -56,7 +56,7 @@ impl BspInitializeBuildParams {
         version: String,
         bsp_version: String,
         root_uri: String,
-        capabilities: BspClientCapabilities,
+        capabilities: ClientCapabilities,
     ) -> Self {
         Self {
             display_name,
@@ -79,12 +79,12 @@ impl BspInitializeBuildParams {
     }
 
     /// Get a reference to the bsp initialize build params's capabilities.
-    pub fn capabilities(&self) -> &BspClientCapabilities {
+    pub fn capabilities(&self) -> &ClientCapabilities {
         &self.capabilities
     }
 
     /// Set the bsp initialize build params's capabilities.
-    pub fn set_capabilities(&mut self, capabilities: BspClientCapabilities) {
+    pub fn set_capabilities(&mut self, capabilities: ClientCapabilities) {
         self.capabilities = capabilities;
     }
 

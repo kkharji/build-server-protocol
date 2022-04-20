@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /// BuildTarget Capabilities
 #[derive(Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct BspBuildTargetCapabilities {
+pub struct BuildTargetCapabilities {
     /// This target can be compiled by the BSP server.
     can_compile: bool,
 
@@ -17,7 +17,7 @@ pub struct BspBuildTargetCapabilities {
     can_debug: bool,
 }
 
-impl BspBuildTargetCapabilities {
+impl BuildTargetCapabilities {
     pub fn new(can_compile: bool, can_test: bool, can_run: bool, can_debug: bool) -> Self {
         Self {
             can_compile,

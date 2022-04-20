@@ -1,21 +1,21 @@
-use crate::BspBuildTargetCapabilities;
-use crate::BspBuildTargetIdentifier;
-use crate::BspLanguage;
+use crate::BuildTargetCapabilities;
+use crate::BuildTargetIdentifier;
 use crate::BuildTargetTag;
+use crate::Language;
 use serde::{Deserialize, Serialize};
 
 /// The workspace build targets request is sent from the client to the server to
 /// ask for the list of all available build targets in the workspace.
 #[derive(Debug, Default, Serialize, Deserialize)]
-pub struct BspWorkspaceBuildTargetsResult {
-    pub targets: Vec<BspBuildTarget>,
+pub struct WorkspaceBuildTargetsResult {
+    pub targets: Vec<BuildTarget>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct BspBuildTarget {
+pub struct BuildTarget {
     /// The target’s unique identifier
-    pub id: BspBuildTargetIdentifier,
+    pub id: BuildTargetIdentifier,
 
     /// A human readable name for this target.
     /// May be presented in the user interface.
@@ -42,25 +42,25 @@ pub struct BspBuildTarget {
     pub tags: Vec<BuildTargetTag>,
 
     /// The capabilities of this build target.
-    pub capabilities: BspBuildTargetCapabilities,
+    pub capabilities: BuildTargetCapabilities,
 
     /// The set of languages that this target contains.
     /// The ID string for each language is defined in the LSP.
-    pub language_ids: Vec<BspLanguage>,
+    pub language_ids: Vec<Language>,
 
     /// The direct upstream build target dependencies of this build target
-    pub dependencies: Vec<BspBuildTargetIdentifier>,
+    pub dependencies: Vec<BuildTargetIdentifier>,
 }
 
-impl BspBuildTarget {
+impl BuildTarget {
     pub fn new(
-        id: BspBuildTargetIdentifier,
+        id: BuildTargetIdentifier,
         display_name: Option<String>,
         base_directory: Option<String>,
         tags: Vec<BuildTargetTag>,
-        capabilities: BspBuildTargetCapabilities,
-        language_ids: Vec<BspLanguage>,
-        dependencies: Vec<BspBuildTargetIdentifier>,
+        capabilities: BuildTargetCapabilities,
+        language_ids: Vec<Language>,
+        dependencies: Vec<BuildTargetIdentifier>,
     ) -> Self {
         Self {
             id,
@@ -73,11 +73,11 @@ impl BspBuildTarget {
         }
     }
     pub fn new_simple(
-        id: BspBuildTargetIdentifier,
+        id: BuildTargetIdentifier,
         tags: Vec<BuildTargetTag>,
-        capabilities: BspBuildTargetCapabilities,
-        language_ids: Vec<BspLanguage>,
-        dependencies: Vec<BspBuildTargetIdentifier>,
+        capabilities: BuildTargetCapabilities,
+        language_ids: Vec<Language>,
+        dependencies: Vec<BuildTargetIdentifier>,
     ) -> Self {
         Self {
             id,
@@ -90,14 +90,14 @@ impl BspBuildTarget {
     }
 }
 
-impl BspWorkspaceBuildTargetsResult {
-    pub fn new(targets: Vec<BspBuildTarget>) -> Self {
+impl WorkspaceBuildTargetsResult {
+    pub fn new(targets: Vec<BuildTarget>) -> Self {
         Self { targets }
     }
 }
 
-impl From<BspBuildTarget> for BspWorkspaceBuildTargetsResult {
-    fn from(target: BspBuildTarget) -> Self {
+impl From<BuildTarget> for WorkspaceBuildTargetsResult {
+    fn from(target: BuildTarget) -> Self {
         Self {
             targets: vec![target],
         }

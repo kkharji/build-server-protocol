@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 #[serde(rename_all = "camelCase")]
 /// The Task Id allows clients to uniquely identify a BSP task and establish a client-parent
 /// relationship with another task id.
-pub struct BspTaskId {
+pub struct BTTaskId {
     /// A unique identifier
     id: String,
 
@@ -16,7 +16,7 @@ pub struct BspTaskId {
     parents: Option<Vec<String>>,
 }
 
-impl BspTaskId {
+impl BTTaskId {
     pub fn new_simple(id: String) -> Self {
         Self { id, parents: None }
     }

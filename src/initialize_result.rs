@@ -1,11 +1,11 @@
-use crate::BspServerCapabilities;
+use crate::ServerCapabilities;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// Initialize Build response result
 #[derive(Default, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct BspInitializeBuildResult {
+pub struct InitializeBuildResult {
     /// Name of the server
     display_name: String,
     /// The version of the server
@@ -13,18 +13,18 @@ pub struct BspInitializeBuildResult {
     /// The BSP version that the server speaks
     bsp_version: String,
     /// The capabilities of the build server
-    capabilities: BspServerCapabilities,
+    capabilities: ServerCapabilities,
     /// Optional metadata about the server
     #[serde(skip_serializing_if = "Option::is_none")]
     data: Option<Value>,
 }
 
-impl BspInitializeBuildResult {
+impl InitializeBuildResult {
     pub fn new(
         display_name: String,
         version: String,
         bsp_version: String,
-        capabilities: BspServerCapabilities,
+        capabilities: ServerCapabilities,
         data: Option<Value>,
     ) -> Self {
         Self {
@@ -40,7 +40,7 @@ impl BspInitializeBuildResult {
         display_name: String,
         version: String,
         bsp_version: String,
-        capabilities: BspServerCapabilities,
+        capabilities: ServerCapabilities,
     ) -> Self {
         Self {
             display_name,
@@ -82,12 +82,12 @@ impl BspInitializeBuildResult {
     }
 
     /// Set the bsp initialize build result's capabilities.
-    pub fn set_capabilities(&mut self, capabilities: BspServerCapabilities) {
+    pub fn set_capabilities(&mut self, capabilities: ServerCapabilities) {
         self.capabilities = capabilities;
     }
 
     /// Get a reference to the bsp initialize build result's capabilities.
-    pub fn capabilities(&self) -> &BspServerCapabilities {
+    pub fn capabilities(&self) -> &ServerCapabilities {
         &self.capabilities
     }
 

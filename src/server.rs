@@ -9,7 +9,7 @@ use crate::*;
 
 #[cfg(feature = "jsonrpc")]
 #[rpc(server)]
-pub trait BspBuildServer {
+pub trait BuildServer {
     /// Invoked when client sends server "build/initialize"
     ///
     /// The initialize request is sent as the first request from the client to the server. If the
@@ -25,7 +25,7 @@ pub trait BspBuildServer {
     /// Until the server has responded to the initialize request with an [`InitializeBuildResult`],
     /// the client must not send any additional requests or notifications to the server.
     #[rpc(name = "build/initialize")]
-    fn initialize(&self, params: BspInitializeBuildParams) -> Result<BspInitializeBuildResult>;
+    fn initialize(&self, params: InitializeBuildParams) -> Result<InitializeBuildResult>;
 
     /// Invoked when client sends server "build/initialized"
     ///
@@ -60,8 +60,8 @@ pub trait BspBuildServer {
     /// The workspace build targets request is sent from the client to the server to ask for the
     /// list of all available build targets in the workspace.
     #[rpc(name = "workspace/buildTargets")]
-    fn workspace_build_targets(&self) -> Result<BspWorkspaceBuildTargetsResult> {
-        Ok(BspWorkspaceBuildTargetsResult::default())
+    fn workspace_bts(&self) -> Result<WorkspaceBuildTargetsResult> {
+        Ok(WorkspaceBuildTargetsResult::default())
     }
 
     /// Invoked when client sends server "workspace/reload"
@@ -81,10 +81,10 @@ pub trait BspBuildServer {
     /// libraries of build target dependencies that are external to the workspace including meta
     /// information about library and their sources. It's an extended version of buildTarget/sources.
     #[rpc(name = "buildTarget/dependencyModules")]
-    fn build_target_dependency_modules(
+    fn bt_dependency_modules(
         &self,
-        params: BspBTDependencyModulesParams,
-    ) -> Result<BspBTDependencyModulesResult> {
+        params: BTDependencyModulesParams,
+    ) -> Result<BTDependencyModulesResult> {
         Err(Error::method_not_found())
     }
 
@@ -93,7 +93,10 @@ pub trait BspBuildServer {
     /// The debug request is sent from the client to the server to debug build target(s). The server
     /// launches a Microsoft DAP server and returns a connection URI for the client to interact with.
     #[rpc(name = "debugSession/start")]
-    fn debug_session_start(&self, params: BspDebugSessionParams) -> Result<BspDebugSessionAddress> {
+    fn debug_session_start(
+        &self,
+        params: DebugSessionStartParams,
+    ) -> Result<DebugSessionStartResult> {
         Err(Error::method_not_found())
     }
 
@@ -104,17 +107,14 @@ pub trait BspBuildServer {
     /// build target. The sources response must not include sources that are
     /// external to the workspace.
     #[rpc(name = "buildTarget/sources")]
-    fn build_target_sources(&self, params: BspSourcesParams) -> Result<BspSourcesResult> {
-        Ok(BspSourcesResult::default())
+    fn bt_sources(&self, params: BTSourcesParams) -> Result<BTSourcesResult> {
+        Ok(BTSourcesResult::default())
     }
 
     /// Invoked when client sends server "buildTarget/inverseSources"
     #[rpc(name = "buildTarget/sources")]
-    fn build_target_inverse_sources(
-        &self,
-        params: BspInverseSourcesParams,
-    ) -> Result<BspInverseSourcesResult> {
-        Ok(BspInverseSourcesResult::default())
+    fn bt_inverse_sources(&self, params: BTInverseSourcesParams) -> Result<BTInverseSourcesResult> {
+        Ok(BTInverseSourcesResult::default())
     }
 
     /// Invoked when client sends server "buildTarget/dependencySources"
@@ -124,11 +124,11 @@ pub trait BspBuildServer {
     /// handshake whether this method is supported or not. This request can be viewed as the inverse of
     /// buildTarget/sources, except it only works for text documents and not directories.
     #[rpc(name = "buildTarget/dependencySources")]
-    fn build_target_dependency_sources(
+    fn bt_dependency_sources(
         &self,
-        params: BspDependencySourcesParams,
-    ) -> Result<BspDependencySourcesResult> {
-        Ok(BspDependencySourcesResult::default())
+        params: BTDependencySourcesParams,
+    ) -> Result<BTDependencySourcesResult> {
+        Ok(BTDependencySourcesResult::default())
     }
 
     /// Invoked when client sends server "buildTarget/resources"
@@ -142,8 +142,8 @@ pub trait BspBuildServer {
     ///
     /// This request can be used by a client to highlight the resources in a project view, for example.
     #[rpc(name = "buildTarget/resources")]
-    fn build_target_resources(&self, params: BspResourcesParams) -> Result<BspResourcesResult> {
-        Ok(BspResourcesResult::default())
+    fn bt_resources(&self, params: BTResourcesParams) -> Result<BTResourcesResult> {
+        Ok(BTResourcesResult::default())
     }
 
     /// Invoked when client sends server "buildTarget/run"
@@ -151,7 +151,7 @@ pub trait BspBuildServer {
     /// The run request is sent from the client to the server to run a build target. The server
     /// communicates during the initialize handshake whether this method is supported or not.
     #[rpc(name = "buildTarget/run")]
-    fn build_target_run(&self, params: BspBTRunParams) -> Result<BspBTRunResult> {
+    fn bt_run(&self, params: BTRunParams) -> Result<BTRunResult> {
         Err(Error::method_not_found())
     }
 
@@ -160,7 +160,7 @@ pub trait BspBuildServer {
     /// The run request is sent from the client to the server to run a build target. The server
     /// communicates during the initialize handshake whether this method is supported or not.
     #[rpc(name = "buildTarget/compile")]
-    fn build_target_compile(&self, params: BspBTCompileParams) -> Result<BspBTCompileResult> {
+    fn bt_compile(&self, params: BTCompileParams) -> Result<PTCompileResult> {
         Err(Error::method_not_found())
     }
 
@@ -170,7 +170,7 @@ pub trait BspBuildServer {
     /// build targets. The server communicates during the initialize handshake whether this method is
     /// supported or not.
     #[rpc(name = "buildTarget/test")]
-    fn build_target_test(&self, params: BspBTTestParams) -> Result<BspBTTestResult> {
+    fn bt_test(&self, params: BTTestParams) -> Result<BTTestResult> {
         Err(Error::method_not_found())
     }
 
@@ -185,10 +185,7 @@ pub trait BspBuildServer {
     /// Stateful build tools must ensure that invoking compilation on a target that has been cleaned
     /// results in a full compilation.
     #[rpc(name = "buildTarget/cleanCache")]
-    fn build_target_clean_cache(
-        &self,
-        params: BspBTCleanCacheParams,
-    ) -> Result<BspBTCleanCacheResult> {
+    fn bt_clean_cache(&self, params: BTCleanCacheParams) -> Result<BTCleanCacheResult> {
         Err(Error::method_not_found())
     }
 }

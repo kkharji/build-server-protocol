@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::BspBuildTargetIdentifier;
+use crate::BuildTargetIdentifier;
 
 /// The clean cache request is sent from the client to the server to reset any state associated with
 /// a given build target. The state can live either in the build tool or in the file system.
@@ -11,19 +11,19 @@ use crate::BspBuildTargetIdentifier;
 /// Stateful build tools must ensure that invoking compilation on a target that has been cleaned
 /// results in a full compilation.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BspBTCleanCacheParams {
+pub struct BTCleanCacheParams {
     /// The build targets to clean.
-    targets: Vec<BspBuildTargetIdentifier>,
+    targets: Vec<BuildTargetIdentifier>,
 }
 
-impl BspBTCleanCacheParams {
+impl BTCleanCacheParams {
     /// Get a reference to the bsp btclean cache params's targets.
-    pub fn targets(&self) -> &[BspBuildTargetIdentifier] {
+    pub fn targets(&self) -> &[BuildTargetIdentifier] {
         self.targets.as_ref()
     }
 
     /// Get a mutable reference to the bsp btclean cache params's targets.
-    pub fn targets_mut(&mut self) -> &mut Vec<BspBuildTargetIdentifier> {
+    pub fn targets_mut(&mut self) -> &mut Vec<BuildTargetIdentifier> {
         &mut self.targets
     }
 
@@ -32,13 +32,13 @@ impl BspBTCleanCacheParams {
     }
 
     /// Set the bsp btclean cache params's targets.
-    pub fn set_targets(&mut self, targets: Vec<BspBuildTargetIdentifier>) {
+    pub fn set_targets(&mut self, targets: Vec<BuildTargetIdentifier>) {
         self.targets = targets;
     }
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BspBTCleanCacheResult {
+pub struct BTCleanCacheResult {
     /// Optional message to display to the user.
     #[serde(skip_serializing_if = "Option::is_none")]
     message: Option<String>,
@@ -46,7 +46,7 @@ pub struct BspBTCleanCacheResult {
     cleaned: bool,
 }
 
-impl BspBTCleanCacheResult {
+impl BTCleanCacheResult {
     pub fn new(message: Option<String>, cleaned: bool) -> Self {
         Self { message, cleaned }
     }
