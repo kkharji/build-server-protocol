@@ -6,8 +6,8 @@
 
 ```toml
 build_server_protocol = "0.1"
-# without json rpc
-build_server_protocol = { version = "0.1", uses_default_features = false }
+# jsonrpc
+build_server_protocol = { version = "0.1", feature = "jsonrpc" }
 ```
 
 
