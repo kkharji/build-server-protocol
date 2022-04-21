@@ -1,3 +1,5 @@
+use std::path::{Path, PathBuf};
+
 use crate::ClientCapabilities;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -24,7 +26,7 @@ pub struct InitializeBuildParams {
     /// The BSP version that the client speaks
     bsp_version: String,
     /// The rootUri of the workspace
-    root_uri: String,
+    root_uri: PathBuf,
     /// The capabilities of the client
     capabilities: ClientCapabilities,
     /// Additional metadata about the client
@@ -33,11 +35,11 @@ pub struct InitializeBuildParams {
 }
 
 impl InitializeBuildParams {
-    pub fn new(
+    pub fn new<P: Into<PathBuf>>(
         display_name: String,
         version: String,
         bsp_version: String,
-        root_uri: String,
+        root_uri: P,
         capabilities: ClientCapabilities,
         data: Option<Value>,
     ) -> Self {
@@ -45,24 +47,24 @@ impl InitializeBuildParams {
             display_name,
             version,
             bsp_version,
-            root_uri,
+            root_uri: root_uri.into(),
             capabilities,
             data,
         }
     }
 
-    pub fn new_simple(
+    pub fn new_simple<P: Into<PathBuf>>(
         display_name: String,
         version: String,
         bsp_version: String,
-        root_uri: String,
+        root_uri: P,
         capabilities: ClientCapabilities,
     ) -> Self {
         Self {
             display_name,
             version,
             bsp_version,
-            root_uri,
+            root_uri: root_uri.into(),
             capabilities,
             data: None,
         }
@@ -89,13 +91,13 @@ impl InitializeBuildParams {
     }
 
     /// Get a reference to the bsp initialize build params's root uri.
-    pub fn root_uri(&self) -> &str {
+    pub fn root_uri(&self) -> &Path {
         self.root_uri.as_ref()
     }
 
     /// Set the bsp initialize build params's root uri.
-    pub fn set_root_uri(&mut self, root_uri: String) {
-        self.root_uri = root_uri;
+    pub fn set_root_uri<P: Into<PathBuf>>(&mut self, root_uri: P) {
+        self.root_uri = root_uri.into();
     }
 
     /// Get a reference to the bsp initialize build params's bsp version.
