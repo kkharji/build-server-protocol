@@ -1,4 +1,4 @@
-use crate::BuildTargetIdentifier;
+use super::BuildTargetIdentifier;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 

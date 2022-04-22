@@ -1,4 +1,4 @@
-use crate::BuildTargetIdentifier;
+use super::BuildTargetIdentifier;
 use lsp_types::TextDocumentIdentifier;
 use serde::{Deserialize, Serialize};
 

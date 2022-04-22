@@ -1,7 +1,7 @@
 use lsp_types::TextDocumentIdentifier;
 use serde::{Deserialize, Serialize};
 
-use crate::BuildTargetIdentifier;
+use super::BuildTargetIdentifier;
 
 /// The inverse sources request is sent from the client to the server to query for the list of
 /// build targets containing a text document. The server communicates during the initialize

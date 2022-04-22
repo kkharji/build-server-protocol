@@ -1,4 +1,4 @@
-use crate::{BTTaskId, MessageType};
+use super::{BTTaskId, MessageType};
 use serde::{Deserialize, Serialize};
 
 /// The log message notification is sent from the server to the client to ask the client to log a

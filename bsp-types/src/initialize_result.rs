@@ -1,4 +1,4 @@
-use crate::ServerCapabilities;
+use super::ServerCapabilities;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -20,32 +20,32 @@ pub struct InitializeBuildResult {
 }
 
 impl InitializeBuildResult {
-    pub fn new(
-        display_name: String,
-        version: String,
-        bsp_version: String,
+    pub fn new<S: Into<String>>(
+        display_name: S,
+        version: S,
+        bsp_version: S,
         capabilities: ServerCapabilities,
-        data: Option<Value>,
+        data: Value,
     ) -> Self {
         Self {
-            display_name,
-            version,
-            bsp_version,
+            display_name: display_name.into(),
+            version: version.into(),
+            bsp_version: bsp_version.into(),
             capabilities,
-            data,
+            data: data.into(),
         }
     }
 
-    pub fn new_simple(
-        display_name: String,
-        version: String,
-        bsp_version: String,
+    pub fn new_simple<S: Into<String>>(
+        display_name: S,
+        version: S,
+        bsp_version: S,
         capabilities: ServerCapabilities,
     ) -> Self {
         Self {
-            display_name,
-            version,
-            bsp_version,
+            display_name: display_name.into(),
+            version: version.into(),
+            bsp_version: bsp_version.into(),
             capabilities,
             data: None,
         }

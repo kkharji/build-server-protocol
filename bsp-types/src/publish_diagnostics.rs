@@ -1,7 +1,7 @@
 use lsp_types::{Diagnostic, TextDocumentIdentifier};
 use serde::{Deserialize, Serialize};
 
-use crate::BuildTargetIdentifier;
+use super::BuildTargetIdentifier;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

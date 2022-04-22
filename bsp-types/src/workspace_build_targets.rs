@@ -1,7 +1,7 @@
-use crate::BuildTargetCapabilities;
-use crate::BuildTargetIdentifier;
-use crate::BuildTargetTag;
-use crate::Language;
+use super::BuildTargetCapabilities;
+use super::BuildTargetIdentifier;
+use super::BuildTargetTag;
+use super::Language;
 use serde::{Deserialize, Serialize};
 
 /// The workspace build targets request is sent from the client to the server to

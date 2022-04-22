@@ -1,4 +1,4 @@
-use crate::{BTTaskId, MessageType};
+use super::{BTTaskId, MessageType};
 use serde::{Deserialize, Serialize};
 
 /// The show message notification is sent from a server to a client to ask the client to display a

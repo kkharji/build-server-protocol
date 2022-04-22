@@ -1,4 +1,4 @@
-use crate::providers::*;
+use super::providers::*;
 use serde::{Deserialize, Serialize};
 
 /// Server Capabilities

@@ -1,0 +1,11 @@
+[package]
+name = "bsp-types"
+version = "0.1.0"
+edition = "2021"
+description = "Build Server Protocol Types"
+
+[dependencies]
+anyhow                = "^1.0.42"
+lsp-types             = "0.93.0"
+serde                 = { version = "1.0", features = ["derive"]  }
+serde_json            = { version = "1.0.79" }

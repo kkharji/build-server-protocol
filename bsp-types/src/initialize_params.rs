@@ -1,6 +1,6 @@
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
-use crate::ClientCapabilities;
+use super::ClientCapabilities;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -26,7 +26,7 @@ pub struct InitializeBuildParams {
     /// The BSP version that the client speaks
     bsp_version: String,
     /// The rootUri of the workspace
-    root_uri: PathBuf,
+    root_uri: String,
     /// The capabilities of the client
     capabilities: ClientCapabilities,
     /// Additional metadata about the client
@@ -35,35 +35,35 @@ pub struct InitializeBuildParams {
 }
 
 impl InitializeBuildParams {
-    pub fn new<P: Into<PathBuf>>(
-        display_name: String,
-        version: String,
-        bsp_version: String,
-        root_uri: P,
+    pub fn new<S: Into<String>>(
+        display_name: S,
+        version: S,
+        bsp_version: S,
+        root_uri: S,
         capabilities: ClientCapabilities,
-        data: Option<Value>,
+        data: Value,
     ) -> Self {
         Self {
-            display_name,
-            version,
-            bsp_version,
+            display_name: display_name.into(),
+            version: version.into(),
+            bsp_version: bsp_version.into(),
             root_uri: root_uri.into(),
             capabilities,
-            data,
+            data: data.into(),
         }
     }
 
-    pub fn new_simple<P: Into<PathBuf>>(
-        display_name: String,
-        version: String,
-        bsp_version: String,
-        root_uri: P,
+    pub fn new_simple<S: Into<String>>(
+        display_name: S,
+        version: S,
+        bsp_version: S,
+        root_uri: S,
         capabilities: ClientCapabilities,
     ) -> Self {
         Self {
-            display_name,
-            version,
-            bsp_version,
+            display_name: display_name.into(),
+            version: version.into(),
+            bsp_version: bsp_version.into(),
             root_uri: root_uri.into(),
             capabilities,
             data: None,
@@ -91,13 +91,20 @@ impl InitializeBuildParams {
     }
 
     /// Get a reference to the bsp initialize build params's root uri.
-    pub fn root_uri(&self) -> &Path {
+    pub fn root_uri(&self) -> &str {
         self.root_uri.as_ref()
     }
 
+    /// Get a reference to the bsp initialize build params's root uri.
+    pub fn root_path(&self) -> Option<PathBuf> {
+        self.root_uri
+            .strip_prefix("file://")
+            .map(|s| PathBuf::from(s))
+    }
+
     /// Set the bsp initialize build params's root uri.
-    pub fn set_root_uri<P: Into<PathBuf>>(&mut self, root_uri: P) {
-        self.root_uri = root_uri.into();
+    pub fn set_root_uri(&mut self, root_uri: String) {
+        self.root_uri = root_uri;
     }
 
     /// Get a reference to the bsp initialize build params's bsp version.

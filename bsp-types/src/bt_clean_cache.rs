@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::BuildTargetIdentifier;
+use super::BuildTargetIdentifier;
 
 /// The clean cache request is sent from the client to the server to reset any state associated with
 /// a given build target. The state can live either in the build tool or in the file system.

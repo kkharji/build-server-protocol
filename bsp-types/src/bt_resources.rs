@@ -1,4 +1,4 @@
-use crate::BuildTargetIdentifier;
+use super::BuildTargetIdentifier;
 use serde::{Deserialize, Serialize};
 /// The build target resources request is sent from the client to the server to query for the list
 /// of resources of a given list of build targets.

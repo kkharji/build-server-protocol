@@ -1,14 +1,8 @@
 #![allow(unused_variables)]
+use super::*;
+use anyhow::Result;
+use serde_json::Value;
 
-#[cfg(feature = "jsonrpc")]
-use jsonrpc_core::*;
-#[cfg(feature = "jsonrpc")]
-use jsonrpc_derive::rpc;
-
-use crate::*;
-
-#[cfg(feature = "jsonrpc")]
-#[rpc(server)]
 pub trait BuildServer {
     /// Invoked when client sends server "build/initialize"
     ///
@@ -24,7 +18,7 @@ pub trait BuildServer {
     ///
     /// Until the server has responded to the initialize request with an [`InitializeBuildResult`],
     /// the client must not send any additional requests or notifications to the server.
-    #[rpc(name = "build/initialize")]
+    // #[rpc(name = "build/initialize")]
     fn initialize(&self, params: InitializeBuildParams) -> Result<InitializeBuildResult>;
 
     /// Invoked when client sends server "build/initialized"
@@ -34,7 +28,7 @@ pub trait BuildServer {
     /// notification to the server. The server can use the initialized notification for example to
     /// initialize intensive computation such as dependency resolution or compilation. The
     /// initialized notification may only be sent once.
-    #[rpc(name = "build/initialized")]
+    // #[rpc(name = "build/initialized")]
     fn on_initializtion(&self) {}
 
     /// Invoked when client sends server "build/shutdown"
@@ -42,7 +36,7 @@ pub trait BuildServer {
     /// The shutdown build request is sent from the client to the server. It asks the server to
     /// shut down, but to not exit (otherwise the response might not be delivered correctly to the
     /// client). There is a separate exit notification that asks the server to exit.
-    #[rpc(name = "build/shutdown")]
+    // #[rpc(name = "build/shutdown")]
     fn build_shutdown(&self) -> Result<Option<Value>> {
         Ok(None)
     }
@@ -52,14 +46,14 @@ pub trait BuildServer {
     /// A notification to ask the server to exit its process. The server should exit with success
     /// code 0 if the shutdown request has been received before;
     /// otherwise with error code 1.
-    #[rpc(name = "build/exit")]
+    // #[rpc(name = "build/exit")]
     fn on_build_exit(&self) {}
 
     /// Invoked when client sends server "workspace/buildTargets"
     ///
     /// The workspace build targets request is sent from the client to the server to ask for the
     /// list of all available build targets in the workspace.
-    #[rpc(name = "workspace/buildTargets")]
+    // #[rpc(name = "workspace/buildTargets")]
     fn workspace_bts(&self) -> Result<WorkspaceBuildTargetsResult> {
         Ok(WorkspaceBuildTargetsResult::default())
     }
@@ -70,7 +64,7 @@ pub trait BuildServer {
     // configuration. This request should be supported by build tools that keep their state in memory.
     // If the reload request returns with an error, it's expected that other requests respond with the
     // previously known "good" state.
-    #[rpc(name = "workspace/reload")]
+    // #[rpc(name = "workspace/reload")]
     fn workspace_reload(&self) -> Result<Option<Value>> {
         Ok(None)
     }
@@ -80,24 +74,26 @@ pub trait BuildServer {
     /// The build target dependency modules request is sent from the client to the server to query for the
     /// libraries of build target dependencies that are external to the workspace including meta
     /// information about library and their sources. It's an extended version of buildTarget/sources.
-    #[rpc(name = "buildTarget/dependencyModules")]
+    // #[rpc(name = "buildTarget/dependencyModules")]
     fn bt_dependency_modules(
         &self,
         params: BTDependencyModulesParams,
     ) -> Result<BTDependencyModulesResult> {
-        Err(Error::method_not_found())
+        todo!()
+        // Err(Error::method_not_found())
     }
 
     /// Invoked when client sends server "buildTarget/dependencyModules"
     ///
     /// The debug request is sent from the client to the server to debug build target(s). The server
     /// launches a Microsoft DAP server and returns a connection URI for the client to interact with.
-    #[rpc(name = "debugSession/start")]
+    // #[rpc(name = "debugSession/start")]
     fn debug_session_start(
         &self,
         params: DebugSessionStartParams,
     ) -> Result<DebugSessionStartResult> {
-        Err(Error::method_not_found())
+        todo!()
+        // Err(Error::method_not_found())
     }
 
     /// Invoked when client sends server "buildTarget/sources"
@@ -106,13 +102,13 @@ pub trait BuildServer {
     /// query for the list of text documents and directories that are belong to a
     /// build target. The sources response must not include sources that are
     /// external to the workspace.
-    #[rpc(name = "buildTarget/sources")]
+    // #[rpc(name = "buildTarget/sources")]
     fn bt_sources(&self, params: BTSourcesParams) -> Result<BTSourcesResult> {
         Ok(BTSourcesResult::default())
     }
 
     /// Invoked when client sends server "buildTarget/inverseSources"
-    #[rpc(name = "buildTarget/sources")]
+    // #[rpc(name = "buildTarget/sources")]
     fn bt_inverse_sources(&self, params: BTInverseSourcesParams) -> Result<BTInverseSourcesResult> {
         Ok(BTInverseSourcesResult::default())
     }
@@ -123,7 +119,7 @@ pub trait BuildServer {
     /// build targets containing a text document. The server communicates during the initialize
     /// handshake whether this method is supported or not. This request can be viewed as the inverse of
     /// buildTarget/sources, except it only works for text documents and not directories.
-    #[rpc(name = "buildTarget/dependencySources")]
+    // #[rpc(name = "buildTarget/dependencySources")]
     fn bt_dependency_sources(
         &self,
         params: BTDependencySourcesParams,
@@ -141,7 +137,7 @@ pub trait BuildServer {
     /// method is supported or not.
     ///
     /// This request can be used by a client to highlight the resources in a project view, for example.
-    #[rpc(name = "buildTarget/resources")]
+    // #[rpc(name = "buildTarget/resources")]
     fn bt_resources(&self, params: BTResourcesParams) -> Result<BTResourcesResult> {
         Ok(BTResourcesResult::default())
     }
@@ -150,18 +146,20 @@ pub trait BuildServer {
     ///
     /// The run request is sent from the client to the server to run a build target. The server
     /// communicates during the initialize handshake whether this method is supported or not.
-    #[rpc(name = "buildTarget/run")]
+    // #[rpc(name = "buildTarget/run")]
     fn bt_run(&self, params: BTRunParams) -> Result<BTRunResult> {
-        Err(Error::method_not_found())
+        todo!()
+        // Err(Error::method_not_found())
     }
 
     /// Invoked when client sends server "buildTarget/compile"
     ///
     /// The run request is sent from the client to the server to run a build target. The server
     /// communicates during the initialize handshake whether this method is supported or not.
-    #[rpc(name = "buildTarget/compile")]
+    // #[rpc(name = "buildTarget/compile")]
     fn bt_compile(&self, params: BTCompileParams) -> Result<PTCompileResult> {
-        Err(Error::method_not_found())
+        todo!()
+        // Err(Error::method_not_found())
     }
 
     /// Invoked when client sends server "buildTarget/test"
@@ -169,9 +167,10 @@ pub trait BuildServer {
     /// The test build target request is sent from the client to the server to test the given list of
     /// build targets. The server communicates during the initialize handshake whether this method is
     /// supported or not.
-    #[rpc(name = "buildTarget/test")]
+    // #[rpc(name = "buildTarget/test")]
     fn bt_test(&self, params: BTTestParams) -> Result<BTTestResult> {
-        Err(Error::method_not_found())
+        todo!()
+        // Err(Error::method_not_found())
     }
 
     /// Invoked when client sends server "buildTarget/cleanCache"
@@ -184,8 +183,9 @@ pub trait BuildServer {
     /// Stateless build tools are free to ignore the request and respond with a successful response.
     /// Stateful build tools must ensure that invoking compilation on a target that has been cleaned
     /// results in a full compilation.
-    #[rpc(name = "buildTarget/cleanCache")]
+    // #[rpc(name = "buildTarget/cleanCache")]
     fn bt_clean_cache(&self, params: BTCleanCacheParams) -> Result<BTCleanCacheResult> {
-        Err(Error::method_not_found())
+        todo!()
+        // Err(Error::method_not_found())
     }
 }
