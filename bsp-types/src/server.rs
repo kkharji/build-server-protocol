@@ -108,7 +108,7 @@ pub trait BuildServer {
     // #[rpc(name = "buildTarget/sources")]
     fn bt_inverse_sources(
         &self,
-        params: BuildTargetInverseSources,
+        params: TextDocumentInverseSources,
     ) -> Result<BuildTargetInverseSourcesResult> {
         Ok(BuildTargetInverseSourcesResult::default())
     }
@@ -147,7 +147,7 @@ pub trait BuildServer {
     /// The run request is sent from the client to the server to run a build target. The server
     /// communicates during the initialize handshake whether this method is supported or not.
     // #[rpc(name = "buildTarget/run")]
-    fn bt_run(&self, params: BuildTargetParams) -> Result<BuildTargetResult> {
+    fn bt_run(&self, params: BuildTargetRun) -> Result<BuildTargetRunResult> {
         todo!()
         // Err(Error::method_not_found())
     }
@@ -157,7 +157,7 @@ pub trait BuildServer {
     /// The run request is sent from the client to the server to run a build target. The server
     /// communicates during the initialize handshake whether this method is supported or not.
     // #[rpc(name = "buildTarget/compile")]
-    fn bt_compile(&self, params: BuildTargetCompile) -> Result<BuildTargetResult> {
+    fn bt_compile(&self, params: BuildTargetCompile) -> Result<BuildTargetCompileResult> {
         todo!()
         // Err(Error::method_not_found())
     }

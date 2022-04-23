@@ -9,11 +9,11 @@ use super::BuildTargetIdentifier;
 /// buildTarget/sources, except it only works for text documents and not directories.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
-pub struct BuildTargetInverseSources {
+pub struct TextDocumentInverseSources {
     text_document: TextDocumentIdentifier,
 }
 
-impl BuildTargetInverseSources {
+impl TextDocumentInverseSources {
     pub fn new(text_document: TextDocumentIdentifier) -> Self {
         Self { text_document }
     }

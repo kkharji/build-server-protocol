@@ -74,7 +74,7 @@ impl BuildTargetCompile {
 /// Note that an empty run request is valid. Run will be executed in the target as specified in the build tool.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
-pub struct BuildTargetResult {
+pub struct BuildTargetCompileResult {
     /// An optional request id to know the origin of this report.
     #[serde(skip_serializing_if = "Option::is_none")]
     origin_id: Option<String>,
@@ -92,7 +92,7 @@ pub struct BuildTargetResult {
     data: Option<Value>,
 }
 
-impl BuildTargetResult {
+impl BuildTargetCompileResult {
     pub fn new(
         origin_id: Option<String>,
         status_code: usize,

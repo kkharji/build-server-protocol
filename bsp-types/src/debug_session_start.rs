@@ -11,6 +11,7 @@ pub struct DebugSessionStart {
     targets: Vec<BuildTargetIdentifier>,
 
     /// The kind of data to expect in the `data` field.
+    /// TODO: Is DebugSessionStart dataKind == TaskDataKind?
     data_kind: String,
 
     /// Language-specific metadata for this execution.

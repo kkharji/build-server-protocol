@@ -22,10 +22,13 @@ pub struct InitializeBuildParams {
     /// Name of the client
     display_name: String,
     /// The version of the client
+    #[serde(skip_serializing_if = "String::is_empty")]
     version: String,
     /// The BSP version that the client speaks
+    #[serde(skip_serializing_if = "String::is_empty")]
     bsp_version: String,
     /// The rootUri of the workspace
+    #[serde(skip_serializing_if = "String::is_empty")]
     root_uri: String,
     /// The capabilities of the client
     capabilities: ClientCapabilities,
