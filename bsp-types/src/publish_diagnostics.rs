@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use super::BuildTargetIdentifier;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct PublishDiagnostics {
     /** The document where the diagnostics are published. */

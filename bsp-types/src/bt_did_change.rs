@@ -4,16 +4,16 @@ use serde::{Deserialize, Serialize};
 /// The build target changed notification is sent from the server to the client
 /// to signal a change in a build target. The server communicates during the
 /// initialize handshake whether this method is supported or not.
-#[derive(Default, Debug, Serialize, Deserialize)]
-pub struct BuildTargetsChangedNotification {
+#[derive(Default, Debug, Serialize, Deserialize, Clone)]
+pub struct BuildTargetDidChange {
     pub changes: Vec<BuildTargetEvent>,
 }
 
-impl BuildTargetsChangedNotification {
+impl BuildTargetDidChange {
     pub const METHOD: &'static str = "buildTarget/didChange";
 }
 
-#[derive(Default, Debug, Serialize, Deserialize)]
+#[derive(Default, Debug, Serialize, Deserialize, Clone)]
 pub struct BuildTargetEvent {
     /// The identifier for the changed build target.
     pub target: BuildTargetIdentifier,
@@ -41,7 +41,7 @@ impl BuildTargetEvent {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum BuildTargetEventKind {
     /// The build target is new [default].
     Created = 1,

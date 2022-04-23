@@ -2,6 +2,8 @@ use std::io;
 use std::net::TcpStream;
 use std::thread;
 
+use crate::Notification;
+
 use super::{IoThreads, Message};
 use crossbeam_channel::{bounded, Receiver, Sender};
 
@@ -25,7 +27,7 @@ impl Transporter {
             let mut stdin = stdin.lock();
             while let Some(msg) = Message::read(&mut stdin)? {
                 let is_exit = match &msg {
-                    Message::Notification(n) => n.is_exit(),
+                    Message::Notification(Notification::Exit) => true,
                     _ => false,
                 };
 
@@ -49,7 +51,7 @@ impl Transporter {
             let reader = thread::spawn(move || {
                 let mut buf_read = io::BufReader::new(stream);
                 while let Some(msg) = Message::read(&mut buf_read).unwrap() {
-                    let is_exit = matches!(&msg, Message::Notification(n) if n.is_exit());
+                    let is_exit = matches!(&msg, Message::Notification(Notification::Exit));
                     reader_sender.send(msg).unwrap();
                     if is_exit {
                         break;

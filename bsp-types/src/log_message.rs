@@ -1,4 +1,4 @@
-use super::{TaskId, MessageType};
+use super::{MessageType, TaskId};
 use serde::{Deserialize, Serialize};
 
 /// The log message notification is sent from the server to the client to ask the client to log a
@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 /// The originId field helps clients know which request originated a notification in case several
 /// requests are handled by the client at the same time. It will only be populated if the client
 /// defined it in the request that triggered this notification.
-#[derive(Default, Debug, Serialize, Deserialize)]
+#[derive(Default, Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct LogMessage {
     /// The message type. See {@link MessageType}.

@@ -10,12 +10,12 @@ use serde::{Deserialize, Serialize};
 /// The originId field helps clients know which request originated
 /// a notification in case several requests are handled by the client at the same time. It will
 /// only be populated if the client defined it in the request that triggered this notification.
-#[derive(Default, Debug, Serialize, Deserialize)]
+#[derive(Default, Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ShowMessage {
     /// The message type. See {@link MessageType}.
     #[serde(rename = "type")]
-    typ: MessageType,
+    pub typ: MessageType,
 
     /// The task id if any.
     #[serde(skip_serializing_if = "Option::is_none")]

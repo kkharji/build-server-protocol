@@ -7,21 +7,21 @@
 //! inspired by lsp-server
 mod error;
 mod io_thread;
-mod msg;
+mod message;
 mod req_queue;
 mod request;
 mod response;
 mod transporter;
 
-mod noti;
+mod notification;
 #[cfg(test)]
 mod tests;
 
 pub use bsp_types as types;
 pub use error::{ErrorCode, ExtractError, ProtocolError};
 pub use io_thread::IoThreads;
-pub use msg::Message;
-pub use noti::Notification;
+pub use message::Message;
+pub use notification::Notification;
 pub use req_queue::{Incoming, Outgoing, ReqQueue};
 pub use request::{Request, RequestId};
 pub use response::{Response, ResponseError};
@@ -162,7 +162,7 @@ impl Connection {
         let resp = Response::ok(initialize_id, initialize_result);
         self.sender.send(resp.into()).unwrap();
         match &self.receiver.recv() {
-            Ok(Message::Notification(n)) if n.is_initialized() => (),
+            Ok(Message::Notification(Notification::Initialized)) => (),
             Ok(msg) => {
                 let msg = format!("expected Message::Notification, got: {:?}", msg,);
                 tracing::error!("{}", msg);
@@ -186,7 +186,7 @@ impl Connection {
         let resp = Response::ok(req.id.clone(), ());
         let _ = self.sender.send(resp.into());
         match &self.receiver.recv_timeout(Duration::from_secs(30)) {
-            Ok(Message::Notification(n)) if n.is_exit() => (),
+            Ok(Message::Notification(Notification::Exit)) => (),
             Ok(msg) => {
                 let msg = format!("unexpected message during shutdown: {:?}", msg);
                 tracing::error!("{}", msg);
