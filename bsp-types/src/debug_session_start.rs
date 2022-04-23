@@ -4,8 +4,8 @@ use serde_json::Value;
 
 /// The debug request is sent from the client to the server to debug build target(s). The server
 /// launches a Microsoft DAP server and returns a connection URI for the client to interact with.
-#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
-#[serde(rename_all = "camelCase")]
+#[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase", default)]
 pub struct DebugSessionStart {
     /// A sequence of build targets affected by the debugging action.
     targets: Vec<BuildTargetIdentifier>,
@@ -16,6 +16,7 @@ pub struct DebugSessionStart {
 
     /// Language-specific metadata for this execution.
     ///  * See https://github.com/build-server-protocol/build-server-protocol/blob/master/bsp4j/src/main/xtend-gen/ch/epfl/scala/bsp4j/ScalaMainClass.java
+    #[serde(skip_serializing_if = "Value::is_null")]
     data: Value,
 }
 

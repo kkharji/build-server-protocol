@@ -61,8 +61,8 @@ impl From<Notification> for Message {
     }
 }
 
-impl From<(String, Value)> for Message {
-    fn from(v: (String, Value)) -> Self {
+impl From<(&'static str, Value)> for Message {
+    fn from(v: (&'static str, Value)) -> Self {
         Self::Notification(Notification::Custom(v.0, v.1))
     }
 }

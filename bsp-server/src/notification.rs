@@ -22,11 +22,11 @@ pub enum Notification {
     TaskFinish(TaskFinish),
     TaskProgress(TaskProgress),
     BuildTargetDidChange(BuildTargetDidChange),
-    Custom(String, Value),
+    Custom(&'static str, Value),
 }
 
 impl Notification {
-    pub fn method(&self) -> &str {
+    pub fn method(&self) -> &'static str {
         use Notification::*;
         match self {
             Exit => "build/exit",
@@ -53,8 +53,8 @@ macro_rules! from_type {
     };
 }
 
-impl From<(String, Value)> for Notification {
-    fn from(v: (String, Value)) -> Self {
+impl From<(&'static str, Value)> for Notification {
+    fn from(v: (&'static str, Value)) -> Self {
         Self::Custom(v.0, v.1)
     }
 }
@@ -87,8 +87,7 @@ impl Serialize for Notification {
 
         use Notification::*;
         match self {
-            // TODO: Should it set value to None?
-            Exit | Self::Initialized => {}
+            Exit | Initialized => {}
             ShowMessage(m) => obj.serialize_field("params", m)?,
             LogMessage(m) => obj.serialize_field("params", m)?,
             PublishDiagnostics(m) => obj.serialize_field("params", m)?,
@@ -239,7 +238,7 @@ impl<'de> Deserialize<'de> for Notification {
                     "build/taskFinish" => TaskFinish(de(params)?),
                     "build/taskProgressing" => TaskProgress(de(params)?),
                     "buildTarget/didChange" => BuildTargetDidChange(de(params)?),
-                    method => Custom(method.into(), params),
+                    _ => Custom(Box::leak(method.into_boxed_str()), params),
                 })
             }
         }
