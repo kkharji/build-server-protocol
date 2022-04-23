@@ -1,16 +1,9 @@
-use crate::ExtractError;
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
+mod id;
+
 use std::fmt;
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-#[serde(transparent)]
-pub struct RequestId(IdRepr);
-
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-#[serde(untagged)]
-enum IdRepr {
-    I32(i32),
-    String(String),
+pub use id::*;
 }
 
 impl From<i32> for RequestId {
