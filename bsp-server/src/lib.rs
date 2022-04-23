@@ -16,7 +16,6 @@ mod transporter;
 mod notification;
 #[cfg(test)]
 mod tests;
-
 pub use bsp_types as types;
 pub use error::{ErrorCode, ExtractError, ProtocolError};
 pub use io_thread::IoThreads;
@@ -28,11 +27,11 @@ pub use response::{Response, ResponseError};
 pub(crate) use transporter::Transporter;
 
 use bsp_types::InitializeBuildParams;
-use crossbeam_channel::{unbounded, Receiver, Sender};
+use crossbeam_channel::{unbounded, Receiver, SendError, SendTimeoutError, Sender, TrySendError};
 use serde::Serialize;
 use std::io;
 use std::net::{TcpListener, TcpStream, ToSocketAddrs};
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 /// Connection is just a pair of channels of LSP messages.
 pub struct Connection {
@@ -199,5 +198,33 @@ impl Connection {
             }
         }
         Ok(true)
+    }
+
+    /// delegates to self.sender
+    pub fn send<T: Into<Message>>(&self, msg: T) -> Result<(), SendError<Message>> {
+        self.sender.send(msg.into())
+    }
+
+    /// delegates to self.sender
+    pub fn try_send<T: Into<Message>>(&self, msg: T) -> Result<(), TrySendError<Message>> {
+        self.sender.try_send(msg.into())
+    }
+
+    /// delegates to self.sender
+    pub fn send_timeout<T: Into<Message>>(
+        &self,
+        msg: T,
+        timeout: Duration,
+    ) -> Result<(), SendTimeoutError<Message>> {
+        self.sender.send_timeout(msg.into(), timeout)
+    }
+
+    /// delegates to self.sender
+    pub fn send_deadline<T: Into<Message>>(
+        &self,
+        msg: T,
+        deadline: Instant,
+    ) -> Result<(), SendTimeoutError<Message>> {
+        self.sender.send_deadline(msg.into(), deadline)
     }
 }
