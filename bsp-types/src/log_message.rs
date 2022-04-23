@@ -30,25 +30,37 @@ pub struct LogMessage {
 }
 
 impl LogMessage {
-    pub fn new(
+    pub fn new<S: Into<String>>(
         typ: MessageType,
+        msg: S,
         task: Option<TaskId>,
-        origin_id: Option<String>,
-        message: String,
+        orid: Option<S>,
     ) -> Self {
         Self {
             typ,
-            task,
-            origin_id,
-            message,
+            task: task.map(Into::into),
+            origin_id: orid.map(Into::into),
+            message: msg.into(),
         }
     }
 
-    pub fn new_simple(typ: MessageType, message: String) -> Self {
-        Self {
-            typ,
-            message,
-            ..Default::default()
-        }
+    /// Send info message.
+    pub fn info<S: Into<String>>(msg: S, task: Option<TaskId>, orid: Option<S>) -> Self {
+        Self::new(MessageType::Info, msg, task, orid)
+    }
+
+    /// Send log message.
+    pub fn log<S: Into<String>>(msg: String, task: Option<TaskId>, orid: Option<String>) -> Self {
+        Self::new(MessageType::Log, msg, task, orid)
+    }
+
+    /// Send warn message.
+    pub fn warn<S: Into<String>>(msg: S, task: Option<TaskId>, orid: Option<S>) -> Self {
+        Self::new(MessageType::Warning, msg, task, orid)
+    }
+
+    /// Send error message.
+    pub fn error<S: Into<String>>(msg: S, task: Option<TaskId>, orid: Option<S>) -> Self {
+        Self::new(MessageType::Error, msg, task, orid)
     }
 }

@@ -19,24 +19,23 @@ pub struct TaskId {
 
 impl From<String> for TaskId {
     fn from(id: String) -> Self {
-        Self::new_simple(id)
-    }
-}
-
-impl From<&str> for TaskId {
-    fn from(id: &str) -> Self {
-        Self::new_simple(id.into())
-    }
-}
-
-impl TaskId {
-    pub fn new_simple(id: String) -> Self {
         Self {
             id,
             parents: Default::default(),
         }
     }
+}
 
+impl From<&str> for TaskId {
+    fn from(id: &str) -> Self {
+        Self {
+            id: id.into(),
+            parents: Default::default(),
+        }
+    }
+}
+
+impl TaskId {
     pub fn new(id: String, parents: Vec<String>) -> Self {
         Self { id, parents }
     }
