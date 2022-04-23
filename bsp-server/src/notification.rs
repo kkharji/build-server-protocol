@@ -43,6 +43,40 @@ impl Notification {
     }
 }
 
+macro_rules! from_type {
+    ($p:ident) => {
+        impl From<$p> for Notification {
+            fn from(msg: $p) -> Self {
+                Self::$p(msg)
+            }
+        }
+    };
+}
+
+impl From<(String, Value)> for Notification {
+    fn from(v: (String, Value)) -> Self {
+        Self::Custom(v.0, v.1)
+    }
+}
+
+impl From<&str> for Notification {
+    fn from(msg: &str) -> Self {
+        match msg {
+            "build/exit" => Self::Exit,
+            "build/initialized" => Self::Initialized,
+            _ => panic!("Only exit and initialized supported."),
+        }
+    }
+}
+
+from_type!(ShowMessage);
+from_type!(LogMessage);
+from_type!(PublishDiagnostics);
+from_type!(TaskStart);
+from_type!(TaskFinish);
+from_type!(TaskProgress);
+from_type!(BuildTargetDidChange);
+
 impl Serialize for Notification {
     fn serialize<S>(&self, s: S) -> Result<S::Ok, S::Error>
     where

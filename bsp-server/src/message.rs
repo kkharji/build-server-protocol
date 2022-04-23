@@ -1,7 +1,12 @@
 use crate::Notification;
 use crate::Request;
 use crate::Response;
+use bsp_types::{
+    BuildTargetDidChange, LogMessage, PublishDiagnostics, ShowMessage, TaskFinish, TaskProgress,
+    TaskStart,
+};
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 use std::io;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -10,13 +15,6 @@ pub enum Message {
     Request(Request),
     Response(Response),
     Notification(Notification),
-}
-
-#[derive(Serialize)]
-struct JsonRpc {
-    jsonrpc: &'static str,
-    #[serde(flatten)]
-    msg: Message,
 }
 
 impl From<Request> for Message {
@@ -31,10 +29,11 @@ impl From<Response> for Message {
     }
 }
 
-impl From<Notification> for Message {
-    fn from(notification: Notification) -> Message {
-        Message::Notification(notification)
-    }
+#[derive(Serialize)]
+struct JsonRpc {
+    jsonrpc: &'static str,
+    #[serde(flatten)]
+    msg: Message,
 }
 
 impl From<Message> for JsonRpc {
@@ -45,6 +44,36 @@ impl From<Message> for JsonRpc {
         }
     }
 }
+
+macro_rules! from_notification {
+    ($p:ident) => {
+        impl From<$p> for Message {
+            fn from(msg: $p) -> Self {
+                Self::Notification(crate::Notification::$p(msg))
+            }
+        }
+    };
+}
+
+impl From<Notification> for Message {
+    fn from(notification: Notification) -> Self {
+        Self::Notification(notification)
+    }
+}
+
+impl From<(String, Value)> for Message {
+    fn from(v: (String, Value)) -> Self {
+        Self::Notification(Notification::Custom(v.0, v.1))
+    }
+}
+
+from_notification!(ShowMessage);
+from_notification!(LogMessage);
+from_notification!(PublishDiagnostics);
+from_notification!(TaskStart);
+from_notification!(TaskFinish);
+from_notification!(TaskProgress);
+from_notification!(BuildTargetDidChange);
 
 impl Message {
     pub(crate) fn read(r: &mut dyn io::BufRead) -> io::Result<Option<Message>> {
