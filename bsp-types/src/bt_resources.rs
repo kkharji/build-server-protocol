@@ -9,11 +9,11 @@ use serde::{Deserialize, Serialize};
 ///
 /// This request can be used by a client to highlight the resources in a project view, for example.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BTResourcesParams {
+pub struct BuildTargetResources {
     targets: Vec<BuildTargetIdentifier>,
 }
 
-impl BTResourcesParams {
+impl BuildTargetResources {
     pub fn new(targets: Vec<BuildTargetIdentifier>) -> Self {
         Self { targets }
     }
@@ -35,11 +35,11 @@ impl BTResourcesParams {
 }
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BTResourcesResult {
+pub struct BuildTargetResourcesResult {
     items: Vec<BTResourcesItem>,
 }
 
-impl BTResourcesResult {
+impl BuildTargetResourcesResult {
     pub fn new(items: Vec<BTResourcesItem>) -> Self {
         Self { items }
     }

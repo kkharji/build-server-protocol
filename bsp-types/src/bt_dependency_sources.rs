@@ -12,11 +12,11 @@ use serde::{Deserialize, Serialize};
 /// to definition" from project sources to dependency sources.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
-pub struct BTDependencySourcesParams {
+pub struct BuildTargetDependencySources {
     text_document: TextDocumentIdentifier,
 }
 
-impl BTDependencySourcesParams {
+impl BuildTargetDependencySources {
     pub fn new(text_document: TextDocumentIdentifier) -> Self {
         Self { text_document }
     }
@@ -33,7 +33,7 @@ impl BTDependencySourcesParams {
 }
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BTDependencySourcesResult {
+pub struct BuildTargetDependencySourcesResult {
     items: Vec<DependencySourcesItem>,
 }
 

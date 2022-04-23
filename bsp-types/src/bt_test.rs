@@ -7,7 +7,7 @@ use serde_json::Value;
 /// supported or not.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
-pub struct BTTestParams {
+pub struct BuildTargetTest {
     /// The build target to run.
     target: BuildTargetIdentifier,
 
@@ -30,7 +30,7 @@ pub struct BTTestParams {
     data: Option<Value>,
 }
 
-impl BTTestParams {
+impl BuildTargetTest {
     pub fn new(
         target: BuildTargetIdentifier,
         origin_id: Option<String>,
@@ -110,7 +110,7 @@ impl BTTestParams {
 /// Note that an empty run request is valid. Run will be executed in the target as specified in the build tool.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
-pub struct BTTestResult {
+pub struct BuildTargetTestResult {
     /// An optional request id to know the origin of this report.
     #[serde(skip_serializing_if = "Option::is_none")]
     origin_id: Option<String>,
@@ -128,7 +128,7 @@ pub struct BTTestResult {
     data: Option<Value>,
 }
 
-impl BTTestResult {
+impl BuildTargetTestResult {
     pub fn new(
         origin_id: Option<String>,
         status_code: usize,

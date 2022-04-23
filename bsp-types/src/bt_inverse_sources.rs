@@ -9,11 +9,11 @@ use super::BuildTargetIdentifier;
 /// buildTarget/sources, except it only works for text documents and not directories.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
-pub struct BTInverseSourcesParams {
+pub struct BuildTargetInverseSources {
     text_document: TextDocumentIdentifier,
 }
 
-impl BTInverseSourcesParams {
+impl BuildTargetInverseSources {
     pub fn new(text_document: TextDocumentIdentifier) -> Self {
         Self { text_document }
     }
@@ -30,6 +30,6 @@ impl BTInverseSourcesParams {
 }
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BTInverseSourcesResult {
+pub struct BuildTargetInverseSourcesResult {
     targets: Vec<BuildTargetIdentifier>,
 }

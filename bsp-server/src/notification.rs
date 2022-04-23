@@ -105,7 +105,6 @@ impl Serialize for Notification {
 
 #[cfg(test)]
 mod se {
-
     use super::*;
     #[test]
     fn initialized() {

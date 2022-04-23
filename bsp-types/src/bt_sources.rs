@@ -6,11 +6,11 @@ use serde::{Deserialize, Serialize};
 /// query for the list of text documents and directories that are belong to a
 /// build target. The sources response must not include sources that are
 /// external to the workspace.
-pub struct BTSourcesParams {
+pub struct BuildTargetSources {
     targets: Vec<BuildTargetIdentifier>,
 }
 
-impl BTSourcesParams {
+impl BuildTargetSources {
     pub fn new(targets: Vec<BuildTargetIdentifier>) -> Self {
         Self { targets }
     }
@@ -27,11 +27,11 @@ impl BTSourcesParams {
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
-pub struct BTSourcesResult {
+pub struct BuildTargetSourcesResult {
     items: Vec<BTSourcesCollection>,
 }
 
-impl BTSourcesResult {
+impl BuildTargetSourcesResult {
     pub fn new(items: Vec<BTSourcesCollection>) -> Self {
         Self { items }
     }

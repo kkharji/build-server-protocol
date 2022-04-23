@@ -77,8 +77,8 @@ pub trait BuildServer {
     // #[rpc(name = "buildTarget/dependencyModules")]
     fn bt_dependency_modules(
         &self,
-        params: BTDependencyModulesParams,
-    ) -> Result<BTDependencyModulesResult> {
+        params: BuildTargetDependencyModule,
+    ) -> Result<BuildTargetDependencyModuleResult> {
         todo!()
         // Err(Error::method_not_found())
     }
@@ -88,10 +88,7 @@ pub trait BuildServer {
     /// The debug request is sent from the client to the server to debug build target(s). The server
     /// launches a Microsoft DAP server and returns a connection URI for the client to interact with.
     // #[rpc(name = "debugSession/start")]
-    fn debug_session_start(
-        &self,
-        params: DebugSessionStartParams,
-    ) -> Result<DebugSessionStartResult> {
+    fn debug_session_start(&self, params: DebugSessionStart) -> Result<DebugSessionStartResult> {
         todo!()
         // Err(Error::method_not_found())
     }
@@ -103,14 +100,17 @@ pub trait BuildServer {
     /// build target. The sources response must not include sources that are
     /// external to the workspace.
     // #[rpc(name = "buildTarget/sources")]
-    fn bt_sources(&self, params: BTSourcesParams) -> Result<BTSourcesResult> {
-        Ok(BTSourcesResult::default())
+    fn bt_sources(&self, params: BuildTargetSources) -> Result<BuildTargetSourcesResult> {
+        Ok(BuildTargetSourcesResult::default())
     }
 
     /// Invoked when client sends server "buildTarget/inverseSources"
     // #[rpc(name = "buildTarget/sources")]
-    fn bt_inverse_sources(&self, params: BTInverseSourcesParams) -> Result<BTInverseSourcesResult> {
-        Ok(BTInverseSourcesResult::default())
+    fn bt_inverse_sources(
+        &self,
+        params: BuildTargetInverseSources,
+    ) -> Result<BuildTargetInverseSourcesResult> {
+        Ok(BuildTargetInverseSourcesResult::default())
     }
 
     /// Invoked when client sends server "buildTarget/dependencySources"
@@ -122,9 +122,9 @@ pub trait BuildServer {
     // #[rpc(name = "buildTarget/dependencySources")]
     fn bt_dependency_sources(
         &self,
-        params: BTDependencySourcesParams,
-    ) -> Result<BTDependencySourcesResult> {
-        Ok(BTDependencySourcesResult::default())
+        params: BuildTargetDependencySources,
+    ) -> Result<BuildTargetDependencySourcesResult> {
+        Ok(BuildTargetDependencySourcesResult::default())
     }
 
     /// Invoked when client sends server "buildTarget/resources"
@@ -138,8 +138,8 @@ pub trait BuildServer {
     ///
     /// This request can be used by a client to highlight the resources in a project view, for example.
     // #[rpc(name = "buildTarget/resources")]
-    fn bt_resources(&self, params: BTResourcesParams) -> Result<BTResourcesResult> {
-        Ok(BTResourcesResult::default())
+    fn bt_resources(&self, params: BuildTargetResources) -> Result<BuildTargetResourcesResult> {
+        Ok(BuildTargetResourcesResult::default())
     }
 
     /// Invoked when client sends server "buildTarget/run"
@@ -147,7 +147,7 @@ pub trait BuildServer {
     /// The run request is sent from the client to the server to run a build target. The server
     /// communicates during the initialize handshake whether this method is supported or not.
     // #[rpc(name = "buildTarget/run")]
-    fn bt_run(&self, params: BTRunParams) -> Result<BTRunResult> {
+    fn bt_run(&self, params: BuildTargetParams) -> Result<BuildTargetResult> {
         todo!()
         // Err(Error::method_not_found())
     }
@@ -157,7 +157,7 @@ pub trait BuildServer {
     /// The run request is sent from the client to the server to run a build target. The server
     /// communicates during the initialize handshake whether this method is supported or not.
     // #[rpc(name = "buildTarget/compile")]
-    fn bt_compile(&self, params: BTCompileParams) -> Result<PTCompileResult> {
+    fn bt_compile(&self, params: BuildTargetCompile) -> Result<BuildTargetResult> {
         todo!()
         // Err(Error::method_not_found())
     }
@@ -168,7 +168,7 @@ pub trait BuildServer {
     /// build targets. The server communicates during the initialize handshake whether this method is
     /// supported or not.
     // #[rpc(name = "buildTarget/test")]
-    fn bt_test(&self, params: BTTestParams) -> Result<BTTestResult> {
+    fn bt_test(&self, params: BuildTargetTest) -> Result<BuildTargetTestResult> {
         todo!()
         // Err(Error::method_not_found())
     }
@@ -184,7 +184,7 @@ pub trait BuildServer {
     /// Stateful build tools must ensure that invoking compilation on a target that has been cleaned
     /// results in a full compilation.
     // #[rpc(name = "buildTarget/cleanCache")]
-    fn bt_clean_cache(&self, params: BTCleanCacheParams) -> Result<BTCleanCacheResult> {
+    fn bt_clean_cache(&self, params: BuildTargetCleanCache) -> Result<BuildTargetCleanCacheResult> {
         todo!()
         // Err(Error::method_not_found())
     }

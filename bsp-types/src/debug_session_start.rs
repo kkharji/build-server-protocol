@@ -6,7 +6,7 @@ use serde_json::Value;
 /// launches a Microsoft DAP server and returns a connection URI for the client to interact with.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
-pub struct DebugSessionStartParams {
+pub struct DebugSessionStart {
     /// A sequence of build targets affected by the debugging action.
     targets: Vec<BuildTargetIdentifier>,
 
@@ -18,7 +18,7 @@ pub struct DebugSessionStartParams {
     data: Value,
 }
 
-impl DebugSessionStartParams {
+impl DebugSessionStart {
     pub fn new(targets: Vec<BuildTargetIdentifier>, data_kind: String, data: Value) -> Self {
         Self {
             targets,

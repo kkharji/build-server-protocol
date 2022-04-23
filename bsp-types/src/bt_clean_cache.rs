@@ -11,12 +11,12 @@ use super::BuildTargetIdentifier;
 /// Stateful build tools must ensure that invoking compilation on a target that has been cleaned
 /// results in a full compilation.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BTCleanCacheParams {
+pub struct BuildTargetCleanCache {
     /// The build targets to clean.
     targets: Vec<BuildTargetIdentifier>,
 }
 
-impl BTCleanCacheParams {
+impl BuildTargetCleanCache {
     /// Get a reference to the bsp btclean cache params's targets.
     pub fn targets(&self) -> &[BuildTargetIdentifier] {
         self.targets.as_ref()
@@ -38,7 +38,7 @@ impl BTCleanCacheParams {
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BTCleanCacheResult {
+pub struct BuildTargetCleanCacheResult {
     /// Optional message to display to the user.
     #[serde(skip_serializing_if = "Option::is_none")]
     message: Option<String>,
@@ -46,7 +46,7 @@ pub struct BTCleanCacheResult {
     cleaned: bool,
 }
 
-impl BTCleanCacheResult {
+impl BuildTargetCleanCacheResult {
     pub fn new(message: Option<String>, cleaned: bool) -> Self {
         Self { message, cleaned }
     }

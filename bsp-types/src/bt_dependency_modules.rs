@@ -6,12 +6,12 @@ use serde_json::Value;
 /// the libraries of build target dependencies that are external to the workspace including meta
 /// information about library and their sources. It's an extended version of buildTarget/sources.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BTDependencyModulesParams {
+pub struct BuildTargetDependencyModule {
     /// The build targets to clean.
     targets: Vec<BuildTargetIdentifier>,
 }
 
-impl BTDependencyModulesParams {
+impl BuildTargetDependencyModule {
     /// Get a reference to the bsp btclean cache params's targets.
     pub fn targets(&self) -> &[BuildTargetIdentifier] {
         self.targets.as_ref()
@@ -33,11 +33,11 @@ impl BTDependencyModulesParams {
 }
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BTDependencyModulesResult {
+pub struct BuildTargetDependencyModuleResult {
     items: Vec<BTDependencyModulesItem>,
 }
 
-impl BTDependencyModulesResult {
+impl BuildTargetDependencyModuleResult {
     pub fn new(items: Vec<BTDependencyModulesItem>) -> Self {
         Self { items }
     }
