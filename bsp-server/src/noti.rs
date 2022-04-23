@@ -1,6 +1,30 @@
 use crate::ExtractError;
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
+use bsp_types::{
+    BuildTargetsChangedNotification, LogMessage, PublishDiagnostics, ShowMessage, TaskFinish,
+    TaskStart,
+};
+pub enum BuildTargetNotification {
+    DidChange(BuildTargetsChangedNotification),
+}
+
+pub enum BuildNotification {
+    Exit,
+    Initialized,
+    ShowMessage(ShowMessage),
+    LogMessage(LogMessage),
+    PublishDiagnostics(PublishDiagnostics),
+    TaskStart(TaskStart),
+    TaskFinish(TaskFinish),
+    TaskProgress(),
+}
+
+pub enum NotificationMethod {
+    Build(BuildNotification),
+    BuildTarget(BuildTargetNotification),
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Notification {
     pub method: String,

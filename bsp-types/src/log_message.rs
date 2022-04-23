@@ -1,4 +1,4 @@
-use super::{BTTaskId, MessageType};
+use super::{TaskId, MessageType};
 use serde::{Deserialize, Serialize};
 
 /// The log message notification is sent from the server to the client to ask the client to log a
@@ -19,7 +19,7 @@ pub struct LogMessage {
 
     /// The task id if any.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub task: Option<BTTaskId>,
+    pub task: Option<TaskId>,
 
     /// The request id that originated this notification.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -32,7 +32,7 @@ pub struct LogMessage {
 impl LogMessage {
     pub fn new(
         typ: MessageType,
-        task: Option<BTTaskId>,
+        task: Option<TaskId>,
         origin_id: Option<String>,
         message: String,
     ) -> Self {

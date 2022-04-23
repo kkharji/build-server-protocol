@@ -1,4 +1,4 @@
-use super::{BTTaskId, MessageType};
+use super::{MessageType, TaskId};
 use serde::{Deserialize, Serialize};
 
 /// The show message notification is sent from a server to a client to ask the client to display a
@@ -19,7 +19,7 @@ pub struct ShowMessage {
 
     /// The task id if any.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub task: Option<BTTaskId>,
+    pub task: Option<TaskId>,
 
     /// The request id that originated this notification.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -32,7 +32,7 @@ pub struct ShowMessage {
 impl ShowMessage {
     pub fn new(
         typ: MessageType,
-        task: Option<BTTaskId>,
+        task: Option<TaskId>,
         origin_id: Option<String>,
         message: String,
     ) -> Self {

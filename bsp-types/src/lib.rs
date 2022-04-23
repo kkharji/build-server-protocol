@@ -23,7 +23,7 @@ mod publish_diagnostics;
 mod server;
 mod server_capabilities;
 mod show_message;
-mod task_id;
+mod task;
 mod workspace_build_targets;
 
 pub use bt_capabilities::*;
@@ -51,5 +51,5 @@ pub use publish_diagnostics::*;
 pub use server::*;
 pub use server_capabilities::*;
 pub use show_message::*;
-pub use task_id::*;
+pub use task::*;
 pub use workspace_build_targets::*;
