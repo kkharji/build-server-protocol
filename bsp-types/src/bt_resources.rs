@@ -55,7 +55,7 @@ impl BuildTargetResourcesResult {
     }
 }
 
-#[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Resources {
     target: BuildTargetIdentifier,
     /// List of resource files.

@@ -1,4 +1,5 @@
 use super::BuildTargetIdentifier;
+use lsp_types::Url;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -63,5 +64,11 @@ impl DebugSessionStart {
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DebugSessionStartResult {
     /** The Debug Adapter Protocol server's connection uri */
-    uri: String,
+    uri: Url,
+}
+
+impl DebugSessionStartResult {
+    pub fn new(uri: Url) -> Self {
+        Self { uri }
+    }
 }

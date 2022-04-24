@@ -1,4 +1,5 @@
 use super::BuildTargetIdentifier;
+use lsp_types::Url;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -47,7 +48,7 @@ impl BuildTargetSourcesResult {
     }
 }
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct SourcesCollection {
     target: BuildTargetIdentifier,
 
@@ -81,12 +82,12 @@ impl SourcesCollection {
     }
 }
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Sources {
     /// Either a text document or a directory. A directory entry must end with a
     /// forward slash "/" and a directory entry implies that every nested text
     /// document within the directory belongs to this source item.
-    uri: String,
+    uri: Url,
 
     /// Type of file of the source item, such as whether it is file or directory.
     kind: SourceKind,
@@ -97,7 +98,10 @@ pub struct Sources {
 }
 
 impl Sources {
-    pub fn new(uri: String, kind: SourceKind, generated: bool) -> Self {
+    /// Either a text document or a directory. A directory entry must end with a
+    /// forward slash "/" and a directory entry implies that every nested text
+    /// document within the directory belongs to this source item.
+    pub fn new(uri: Url, kind: SourceKind, generated: bool) -> Self {
         Self {
             uri,
             kind,
@@ -116,12 +120,12 @@ impl Sources {
     }
 
     /// Get a reference to the bsp sources item's uri.
-    pub fn uri(&self) -> &str {
-        self.uri.as_ref()
+    pub fn uri(&self) -> &Url {
+        &self.uri
     }
 
     /// Set the bsp sources item's uri.
-    pub fn set_uri(&mut self, uri: String) {
+    pub fn set_uri(&mut self, uri: Url) {
         self.uri = uri;
     }
 

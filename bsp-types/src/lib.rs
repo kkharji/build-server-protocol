@@ -45,6 +45,7 @@ pub use initialize_params::*;
 pub use initialize_result::*;
 pub use language::*;
 pub use log_message::*;
+pub use lsp_types::Url;
 pub use message_type::*;
 pub use providers::*;
 pub use publish_diagnostics::*;

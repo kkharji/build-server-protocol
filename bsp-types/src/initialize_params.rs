@@ -1,11 +1,12 @@
 use std::path::PathBuf;
 
 use super::ClientCapabilities;
+use lsp_types::Url;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-#[derive(Default, Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
-#[serde(rename_all = "camelCase", default)]
+#[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
+#[serde(rename_all = "camelCase")]
 /// Like the language server protocol, the initialize request is sent as the first request from the
 /// client to the server. If the server receives a request or notification before the initialize
 /// request it should act as follows:
@@ -22,18 +23,18 @@ pub struct InitializeBuild {
     /// Name of the client
     display_name: String,
     /// The version of the client
-    #[serde(skip_serializing_if = "String::is_empty")]
+    #[serde(skip_serializing_if = "String::is_empty", default)]
     version: String,
     /// The BSP version that the client speaks
-    #[serde(skip_serializing_if = "String::is_empty")]
+    #[serde(skip_serializing_if = "String::is_empty", default)]
     bsp_version: String,
     /// The rootUri of the workspace
-    #[serde(skip_serializing_if = "String::is_empty")]
-    root_uri: String,
+    root_uri: Url,
     /// The capabilities of the client
+    #[serde(default)]
     capabilities: ClientCapabilities,
     /// Additional metadata about the client
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
     data: Option<Value>,
 }
 
@@ -42,7 +43,7 @@ impl InitializeBuild {
         display_name: S,
         version: S,
         bsp_version: S,
-        root_uri: S,
+        root_uri: Url,
         capabilities: ClientCapabilities,
         data: Value,
     ) -> Self {
@@ -60,7 +61,7 @@ impl InitializeBuild {
         display_name: S,
         version: S,
         bsp_version: S,
-        root_uri: S,
+        root_uri: Url,
         capabilities: ClientCapabilities,
     ) -> Self {
         Self {
@@ -99,14 +100,12 @@ impl InitializeBuild {
     }
 
     /// Get a reference to the bsp initialize build params's root uri.
-    pub fn root_path(&self) -> Option<PathBuf> {
-        self.root_uri
-            .strip_prefix("file://")
-            .map(|s| PathBuf::from(s))
+    pub fn root_path(&self) -> PathBuf {
+        self.root_uri.path().into()
     }
 
     /// Set the bsp initialize build params's root uri.
-    pub fn set_root_uri(&mut self, root_uri: String) {
+    pub fn set_root_uri(&mut self, root_uri: Url) {
         self.root_uri = root_uri;
     }
 

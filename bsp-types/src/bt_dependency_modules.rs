@@ -53,7 +53,7 @@ impl BuildTargetDependencyModulesResult {
     }
 }
 
-#[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DependencyModulesItem {
     target: BuildTargetIdentifier,
     modules: Vec<DependencyModule>,

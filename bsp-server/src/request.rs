@@ -267,14 +267,21 @@ mod se {
     use super::*;
     #[test]
     fn initialize() {
-        let mut params = InitializeBuild::default();
+        let mut params = InitializeBuild::new(
+            "MyName",
+            "1",
+            "2",
+            Url::from_file_path("/tmp/lua_27s2fl").unwrap(),
+            Default::default(),
+            Default::default(),
+        );
         params.set_display_name("MyName".into());
 
         let value = &Request::InitializeBuild(3.into(), params);
         let result = to_string(value).unwrap();
         assert_eq!(
             result,
-            "{\"id\":3,\"method\":\"build/initialize\",\"params\":{\"displayName\":\"MyName\",\"capabilities\":{\"languageIds\":[]}}}"
+           "{\"id\":3,\"method\":\"build/initialize\",\"params\":{\"displayName\":\"MyName\",\"version\":\"1\",\"bspVersion\":\"2\",\"rootUri\":\"file:///tmp/lua_27s2fl\",\"capabilities\":{\"languageIds\":[]},\"data\":null}}" 
         );
     }
 
@@ -442,7 +449,7 @@ mod de {
     use super::*;
     #[test]
     fn initialize() {
-        let value = "{\"id\":3,\"method\":\"build/initialize\",\"params\":{\"displayName\":\"MyName\",\"capabilities\":{\"languageIds\":[]}}}";
+        let value = "{\"id\":3,\"method\":\"build/initialize\",\"params\":{\"displayName\":\"MyName\",\"version\":\"1\",\"bspVersion\":\"2\",\"rootUri\":\"file:///tmp/lua_27s2fl\",\"capabilities\":{\"languageIds\":[]},\"data\":null}}";
         let msg = serde_json::from_str(value).unwrap();
         assert!(matches!(
             msg,

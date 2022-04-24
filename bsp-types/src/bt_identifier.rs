@@ -1,12 +1,13 @@
+use lsp_types::Url;
 use serde::{Deserialize, Serialize};
 
-#[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
 pub struct BuildTargetIdentifier {
-    uri: String,
+    uri: Url,
 }
 
 impl BuildTargetIdentifier {
-    pub fn new(uri: String) -> Self {
+    pub fn new(uri: Url) -> Self {
         Self { uri }
     }
 
@@ -16,11 +17,7 @@ impl BuildTargetIdentifier {
     }
 
     /// Set the bsp build target identifier's uri.
-    pub fn set_uri(&mut self, uri: String) {
+    pub fn set_uri(&mut self, uri: Url) {
         self.uri = uri;
-    }
-
-    pub fn is_empty(&self) -> bool {
-        self.uri.is_empty()
     }
 }

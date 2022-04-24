@@ -37,7 +37,7 @@ pub struct BuildTargetDependencySourcesResult {
     items: Vec<DependencySourcesItem>,
 }
 
-#[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DependencySourcesItem {
     target: BuildTargetIdentifier,
     /// List of resources containing source files of the

@@ -12,7 +12,7 @@ pub struct WorkspaceBuildTargetsResult {
 }
 
 /// Build target contains metadata about an artifact (for example library, test, or binary artifact)
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BuildTarget {
     /// The target’s unique identifier
@@ -86,7 +86,8 @@ impl BuildTarget {
             capabilities,
             language_ids,
             dependencies,
-            ..Default::default()
+            display_name: Default::default(),
+            base_directory: Default::default(),
         }
     }
 }

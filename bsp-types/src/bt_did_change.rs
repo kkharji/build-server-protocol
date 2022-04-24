@@ -13,7 +13,7 @@ impl BuildTargetDidChange {
     pub const METHOD: &'static str = "buildTarget/didChange";
 }
 
-#[derive(Default, Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct BuildTargetEvent {
     /// The identifier for the changed build target.
     pub target: BuildTargetIdentifier,
@@ -36,7 +36,8 @@ impl BuildTargetEvent {
     pub fn new_simple(target: BuildTargetIdentifier) -> Self {
         Self {
             target,
-            ..Default::default()
+            kind: Default::default(),
+            data: Default::default(),
         }
     }
 }
