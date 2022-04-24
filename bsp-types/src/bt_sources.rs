@@ -136,8 +136,8 @@ impl Sources {
     }
 }
 
-/// TODO: correclty derive number enum with serde_repr
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, serde_repr::Deserialize_repr, serde_repr::Serialize_repr)]
+#[repr(u16)]
 pub enum SourceKind {
     /// The source item references a normal file.
     File = 1,

@@ -41,7 +41,8 @@ impl BuildTargetEvent {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Clone, Debug, serde_repr::Deserialize_repr, serde_repr::Serialize_repr)]
+#[repr(u16)]
 pub enum BuildTargetEventKind {
     /// The build target is new (default).
     Created = 1,

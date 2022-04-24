@@ -1,5 +1,6 @@
 # Build Server Protocol
 
+State: Working, Unstable, feature releases might break 0.1
 [Build Server Protocol](https://build-server-protocol.github.io/docs/specification.html) client, server and type definition in rust.
 
 ## Example 
