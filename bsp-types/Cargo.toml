@@ -1,6 +1,6 @@
 [package]
 name = "bsp-types"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Build Server Protocol Types"
 repository = "https://github.com/tami5/build-server-protocol"
