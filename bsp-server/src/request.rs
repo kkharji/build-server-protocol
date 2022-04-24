@@ -47,10 +47,6 @@ pub enum Request {
     BuildTargetTest(RequestId, BuildTargetTest),
     /// Client->Server: reset any state associated with a given build target
     BuildTargetCleanCache(RequestId, BuildTargetCleanCache),
-    /// Server-Client: Ask Client to show a message
-    ShowMessage(RequestId, ShowMessage),
-    /// Server-Client: Ask Client to log a message
-    LogMessage(RequestId, LogMessage),
     /// Any custom message not yet supported in the crate or custom
     Custom(RequestId, &'static str, Value),
 }
@@ -74,8 +70,6 @@ impl Request {
             BuildTargetTest(_, _) => "buildTarget/test",
             BuildTargetCleanCache(_, _) => "buildTarget/cleanCache",
             Custom(_, m, _) => m,
-            ShowMessage(_, _) => "build/showMessage",
-            LogMessage(_, _) => "build/logMessage",
         }
     }
 
@@ -96,8 +90,6 @@ impl Request {
             | BuildTargetCompile(id, _)
             | BuildTargetTest(id, _)
             | BuildTargetCleanCache(id, _)
-            | LogMessage(id, _)
-            | ShowMessage(id, _)
             | Custom(id, _, _) => id,
         }
     }
@@ -175,8 +167,6 @@ impl fmt::Debug for Request {
             Request::BuildTargetCompile(id, value) => format(f, id, value),
             Request::BuildTargetTest(id, value) => format(f, id, value),
             Request::BuildTargetCleanCache(id, value) => format(f, id, value),
-            Request::ShowMessage(id, value) => format(f, id, value),
-            Request::LogMessage(id, value) => format(f, id, value),
             Request::Custom(id, method, value) => {
                 fmt::Display::fmt(&id, f)?;
                 f.write_str(", ")?;
@@ -249,16 +239,6 @@ impl Serialize for Request {
                 obj.serialize_field("params", value)?;
             }
             BuildTargetTest(id, value) => {
-                obj.serialize_field("id", id)?;
-                obj.serialize_field("method", method)?;
-                obj.serialize_field("params", value)?;
-            }
-            LogMessage(id, value) => {
-                obj.serialize_field("id", id)?;
-                obj.serialize_field("method", method)?;
-                obj.serialize_field("params", value)?;
-            }
-            ShowMessage(id, value) => {
                 obj.serialize_field("id", id)?;
                 obj.serialize_field("method", method)?;
                 obj.serialize_field("params", value)?;
@@ -448,8 +428,6 @@ impl<'de> Deserialize<'de> for Request {
                     "buildTarget/compile" => Request::BuildTargetCompile(id, de(params)?),
                     "buildTarget/test" => Request::BuildTargetTest(id, de(params)?),
                     "buildTarget/cleanCache" => Request::BuildTargetCleanCache(id, de(params)?),
-                    "build/logMessage" => Request::LogMessage(id, de(params)?),
-                    "build/showMessage" => Request::ShowMessage(id, de(params)?),
                     _ => Request::Custom(id, Box::leak(method.into_boxed_str()), params),
                 })
             }
