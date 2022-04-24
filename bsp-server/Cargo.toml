@@ -3,6 +3,8 @@ name = "bsp-server"
 version = "0.1.0"
 edition = "2021"
 description = "Build Server Protocol (Server)"
+repository = "https://github.com/tami5/build-server-protocol"
+license = "MIT OR Apache-2.0"
 
 [dependencies]
 anyhow                = { version  = "^1.0.42" }
