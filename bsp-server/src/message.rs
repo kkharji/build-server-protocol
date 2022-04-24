@@ -1,12 +1,7 @@
 use crate::Notification;
 use crate::Request;
 use crate::Response;
-use bsp_types::{
-    BuildTargetDidChange, LogMessage, PublishDiagnostics, ShowMessage, TaskFinish, TaskProgress,
-    TaskStart,
-};
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 use std::io;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -15,18 +10,6 @@ pub enum Message {
     Request(Request),
     Response(Response),
     Notification(Notification),
-}
-
-impl From<Request> for Message {
-    fn from(request: Request) -> Message {
-        Message::Request(request)
-    }
-}
-
-impl From<Response> for Message {
-    fn from(response: Response) -> Message {
-        Message::Response(response)
-    }
 }
 
 #[derive(Serialize)]
@@ -44,36 +27,6 @@ impl From<Message> for JsonRpc {
         }
     }
 }
-
-macro_rules! from_notification {
-    ($p:ident) => {
-        impl From<$p> for Message {
-            fn from(msg: $p) -> Self {
-                Self::Notification(crate::Notification::$p(msg))
-            }
-        }
-    };
-}
-
-impl From<Notification> for Message {
-    fn from(notification: Notification) -> Self {
-        Self::Notification(notification)
-    }
-}
-
-impl From<(&'static str, Value)> for Message {
-    fn from(v: (&'static str, Value)) -> Self {
-        Self::Notification(Notification::Custom(v.0, v.1))
-    }
-}
-
-from_notification!(ShowMessage);
-from_notification!(LogMessage);
-from_notification!(PublishDiagnostics);
-from_notification!(TaskStart);
-from_notification!(TaskFinish);
-from_notification!(TaskProgress);
-from_notification!(BuildTargetDidChange);
 
 impl Message {
     pub(crate) fn read(r: &mut dyn io::BufRead) -> io::Result<Option<Message>> {
@@ -100,13 +53,12 @@ fn invalid_data(error: impl Into<Box<dyn std::error::Error + Send + Sync>>) -> i
     io::Error::new(io::ErrorKind::InvalidData, error)
 }
 
-macro_rules! invalid_data {
-        ($($tt:tt)*) => (invalid_data(format!($($tt)*)))
-}
+macro_rules! invalid_data { ($($tt:tt)*) => (invalid_data(format!($($tt)*))) }
 
 fn read_msg_text(inp: &mut dyn io::BufRead) -> io::Result<Option<String>> {
     let mut size = None;
     let mut buf = String::new();
+
     loop {
         buf.clear();
         if inp.read_line(&mut buf)? == 0 {
@@ -128,11 +80,12 @@ fn read_msg_text(inp: &mut dyn io::BufRead) -> io::Result<Option<String>> {
             size = Some(header_value.parse::<usize>().map_err(invalid_data)?);
         }
     }
+
     let size: usize = size.ok_or_else(|| invalid_data!("no Content-Length"))?;
     let mut buf = buf.into_bytes();
+
     buf.resize(size, 0);
     inp.read_exact(&mut buf)?;
-    let buf = String::from_utf8(buf).map_err(invalid_data)?;
 
-    Ok(Some(buf))
+    Ok(Some(String::from_utf8(buf).map_err(invalid_data)?))
 }

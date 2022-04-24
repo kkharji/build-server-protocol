@@ -11,6 +11,8 @@ use serde::{
 };
 use serde_json::Value;
 
+use crate::Message;
+
 #[derive(Debug, Clone)]
 pub enum Notification {
     Exit,
@@ -43,16 +45,6 @@ impl Notification {
     }
 }
 
-macro_rules! from_type {
-    ($p:ident) => {
-        impl From<$p> for Notification {
-            fn from(msg: $p) -> Self {
-                Self::$p(msg)
-            }
-        }
-    };
-}
-
 impl From<(&'static str, Value)> for Notification {
     fn from(v: (&'static str, Value)) -> Self {
         Self::Custom(v.0, v.1)
@@ -69,13 +61,40 @@ impl From<&str> for Notification {
     }
 }
 
-from_type!(ShowMessage);
-from_type!(LogMessage);
-from_type!(PublishDiagnostics);
-from_type!(TaskStart);
-from_type!(TaskFinish);
-from_type!(TaskProgress);
-from_type!(BuildTargetDidChange);
+impl From<Notification> for Message {
+    fn from(notification: Notification) -> Self {
+        Self::Notification(notification)
+    }
+}
+
+impl From<(&'static str, Value)> for Message {
+    fn from(v: (&'static str, Value)) -> Self {
+        Self::Notification(Notification::Custom(v.0, v.1))
+    }
+}
+
+macro_rules! convertible {
+    ($p:ident) => {
+        impl From<$p> for Notification {
+            fn from(msg: $p) -> Self {
+                Self::$p(msg)
+            }
+        }
+        impl From<$p> for Message {
+            fn from(msg: $p) -> Self {
+                Self::Notification(crate::Notification::$p(msg))
+            }
+        }
+    };
+}
+
+convertible!(ShowMessage);
+convertible!(LogMessage);
+convertible!(PublishDiagnostics);
+convertible!(TaskStart);
+convertible!(TaskFinish);
+convertible!(TaskProgress);
+convertible!(BuildTargetDidChange);
 
 impl Serialize for Notification {
     fn serialize<S>(&self, s: S) -> Result<S::Ok, S::Error>

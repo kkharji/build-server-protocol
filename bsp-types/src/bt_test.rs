@@ -5,7 +5,7 @@ use serde_json::Value;
 /// The test build target request is sent from the client to the server to test the given list of
 /// build targets. The server communicates during the initialize handshake whether this method is
 /// supported or not.
-#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct BuildTargetTest {
     /// The build target to run.
@@ -25,7 +25,7 @@ pub struct BuildTargetTest {
     data_kind: Option<String>,
 
     /// Language-specific metadata for this execution.
-    ///  * See https://github.com/build-server-protocol/build-server-protocol/blob/9dce5849816483b5b0a2baed24f83bf101546184/bsp4j/src/main/xtend-gen/ch/epfl/scala/bsp4j/ScalaTestParams.java
+    ///  * See <https://github.com/build-server-protocol/build-server-protocol/blob/9dce5849816483b5b0a2baed24f83bf101546184/bsp4j/src/main/xtend-gen/ch/epfl/scala/bsp4j/ScalaTestParams.java>
     #[serde(skip_serializing_if = "Option::is_none")]
     data: Option<Value>,
 }

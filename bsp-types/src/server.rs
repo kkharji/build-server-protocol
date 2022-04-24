@@ -19,7 +19,7 @@ pub trait BuildServer {
     /// Until the server has responded to the initialize request with an [`InitializeBuildResult`],
     /// the client must not send any additional requests or notifications to the server.
     // #[rpc(name = "build/initialize")]
-    fn initialize(&self, params: InitializeBuildParams) -> Result<InitializeBuildResult>;
+    fn initialize(&self, params: InitializeBuild) -> Result<InitializeBuildResult>;
 
     /// Invoked when client sends server "build/initialized"
     ///
@@ -77,8 +77,8 @@ pub trait BuildServer {
     // #[rpc(name = "buildTarget/dependencyModules")]
     fn bt_dependency_modules(
         &self,
-        params: BuildTargetDependencyModule,
-    ) -> Result<BuildTargetDependencyModuleResult> {
+        params: BuildTargetDependencyModules,
+    ) -> Result<BuildTargetDependencyModulesResult> {
         todo!()
         // Err(Error::method_not_found())
     }

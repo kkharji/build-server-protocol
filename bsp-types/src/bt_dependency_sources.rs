@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 /// The server communicates during the initialize handshake whether this method is supported or
 /// not. This method can for example be used by a language server on textDocument/definition to "Go
 /// to definition" from project sources to dependency sources.
-#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct BuildTargetDependencySources {
     text_document: TextDocumentIdentifier,

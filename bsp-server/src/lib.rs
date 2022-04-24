@@ -8,7 +8,7 @@
 mod error;
 mod io_thread;
 mod message;
-mod req_queue;
+// mod req_queue;
 mod request;
 mod response;
 mod transporter;
@@ -21,12 +21,12 @@ pub use error::{ErrorCode, ExtractError, ProtocolError};
 pub use io_thread::IoThreads;
 pub use message::Message;
 pub use notification::Notification;
-pub use req_queue::{Incoming, Outgoing, ReqQueue};
+// pub use req_queue::{Incoming, Outgoing, ReqQueue};
 pub use request::{Request, RequestId};
 pub use response::{Response, ResponseError};
 pub(crate) use transporter::Transporter;
 
-use bsp_types::InitializeBuildParams;
+use bsp_types::InitializeBuild;
 use crossbeam_channel::{unbounded, Receiver, SendError, SendTimeoutError, Sender, TrySendError};
 use serde::Serialize;
 use std::io;
@@ -113,28 +113,26 @@ impl Connection {
     #[tracing::instrument(skip_all)]
     pub fn initialize<V: Serialize>(
         &self,
-        process: impl FnOnce(&InitializeBuildParams) -> V,
-    ) -> Result<InitializeBuildParams, ProtocolError> {
+        process: impl FnOnce(&InitializeBuild) -> V,
+    ) -> Result<InitializeBuild, ProtocolError> {
         let (id, params) = self.initialize_start()?;
         self.initialize_finish(id, process(&params))?;
         Ok(params)
     }
 
     #[tracing::instrument(skip(self))]
-    fn initialize_start(&self) -> Result<(RequestId, InitializeBuildParams), ProtocolError> {
+    fn initialize_start(&self) -> Result<(RequestId, InitializeBuild), ProtocolError> {
         loop {
             match self.receiver.recv() {
-                Ok(Message::Request(req)) if req.is_initialize() => {
-                    // WARN: force unwrap
-                    let params = serde_json::from_value(req.params).unwrap();
-                    return Ok((req.id, params));
+                Ok(Message::Request(Request::InitializeBuild(id, params))) => {
+                    return Ok((id, params));
                 }
                 // Respond to non-initialize requests with ServerNotInitialized
                 Ok(Message::Request(req)) => {
                     let msg = format!("expected initialize request, got {:?}", req);
                     tracing::error!("{}", msg);
                     self.sender
-                        .send(Response::server_not_initialized(req.id.clone(), msg).into())
+                        .send(Response::server_not_initialized(req.id().clone(), msg).into())
                         .unwrap();
                 }
                 Ok(msg) => {
@@ -178,26 +176,27 @@ impl Connection {
 
     /// If `req` is `Shutdown`, respond to it and return `true`, otherwise return `false`
     pub fn handle_shutdown(&self, req: &Request) -> Result<bool, ProtocolError> {
-        if !req.is_shutdown() {
-            return Ok(false);
-        }
-        tracing::info!("processing shutdown server ...");
-        let resp = Response::ok(req.id.clone(), ());
-        let _ = self.sender.send(resp.into());
-        match &self.receiver.recv_timeout(Duration::from_secs(30)) {
-            Ok(Message::Notification(Notification::Exit)) => (),
-            Ok(msg) => {
-                let msg = format!("unexpected message during shutdown: {:?}", msg);
-                tracing::error!("{}", msg);
+        if let Request::Shutdown(id) = req {
+            tracing::info!("processing shutdown server ...");
+            let resp = Response::ok(id.clone(), ());
+            let _ = self.sender.send(resp.into());
+            match &self.receiver.recv_timeout(Duration::from_secs(30)) {
+                Ok(Message::Notification(Notification::Exit)) => (),
+                Ok(msg) => {
+                    let msg = format!("unexpected message during shutdown: {:?}", msg);
+                    tracing::error!("{}", msg);
 
-                return Err(ProtocolError(msg));
+                    return Err(ProtocolError(msg));
+                }
+                Err(e) => {
+                    let msg = format!("unexpected error during shutdown: {}", e);
+                    return Err(ProtocolError(msg));
+                }
             }
-            Err(e) => {
-                let msg = format!("unexpected error during shutdown: {}", e);
-                return Err(ProtocolError(msg));
-            }
+            Ok(true)
+        } else {
+            Ok(false)
         }
-        Ok(true)
     }
 
     /// delegates to self.sender

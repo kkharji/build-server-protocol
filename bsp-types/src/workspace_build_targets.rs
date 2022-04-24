@@ -11,6 +11,7 @@ pub struct WorkspaceBuildTargetsResult {
     pub targets: Vec<BuildTarget>,
 }
 
+/// Build target contains metadata about an artifact (for example library, test, or binary artifact)
 #[derive(Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BuildTarget {

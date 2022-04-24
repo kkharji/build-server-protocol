@@ -7,7 +7,7 @@ use super::BuildTargetIdentifier;
 /// build targets containing a text document. The server communicates during the initialize
 /// handshake whether this method is supported or not. This request can be viewed as the inverse of
 /// buildTarget/sources, except it only works for text documents and not directories.
-#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentInverseSources {
     text_document: TextDocumentIdentifier,

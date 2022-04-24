@@ -8,7 +8,7 @@ pub enum MessageType {
     Warning = 2,
     /// An information message.
     Info = 3,
-    /// A log message. [default]
+    /// A log message. (default)
     Log = 4,
 }
 

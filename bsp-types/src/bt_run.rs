@@ -4,7 +4,7 @@ use serde_json::Value;
 
 /// The run request is sent from the client to the server to run a build target. The server
 /// communicates during the initialize handshake whether this method is supported or not.
-#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct BuildTargetRun {
     /// The build target to run.
@@ -24,7 +24,7 @@ pub struct BuildTargetRun {
     data_kind: Option<String>,
 
     /// Language-specific metadata for this execution.
-    ///  * See https://github.com/build-server-protocol/build-server-protocol/blob/master/bsp4j/src/main/xtend-gen/ch/epfl/scala/bsp4j/ScalaMainClass.java
+    ///  * See <https://github.com/build-server-protocol/build-server-protocol/blob/master/bsp4j/src/main/xtend-gen/ch/epfl/scala/bsp4j/ScalaMainClass.java>
     #[serde(skip_serializing_if = "Option::is_none")]
     data: Option<Value>,
 }

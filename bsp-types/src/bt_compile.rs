@@ -4,7 +4,7 @@ use serde_json::Value;
 
 /// The run request is sent from the client to the server to run a build target. The server
 /// communicates during the initialize handshake whether this method is supported or not.
-#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct BuildTargetCompile {
     /// A sequence of build targets to compile.

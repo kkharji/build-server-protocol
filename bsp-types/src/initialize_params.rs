@@ -4,8 +4,8 @@ use super::ClientCapabilities;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-#[derive(Default, Debug, Serialize, Deserialize, Eq, PartialEq)]
-#[serde(rename_all = "camelCase")]
+#[derive(Default, Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
+#[serde(rename_all = "camelCase", default)]
 /// Like the language server protocol, the initialize request is sent as the first request from the
 /// client to the server. If the server receives a request or notification before the initialize
 /// request it should act as follows:
@@ -16,9 +16,9 @@ use serde_json::Value;
 /// - Notifications should be dropped, except for the exit notification. This will allow the exit
 /// of a server without an initialize request.
 ///
-/// Until the server has responded to the initialize request with an [`InitializeBuildResult`], the
+/// Until the server has responded to the initialize request with an [`crate::InitializeBuildResult`], the
 /// client must not send any additional requests or notifications to the server.
-pub struct InitializeBuildParams {
+pub struct InitializeBuild {
     /// Name of the client
     display_name: String,
     /// The version of the client
@@ -37,7 +37,7 @@ pub struct InitializeBuildParams {
     data: Option<Value>,
 }
 
-impl InitializeBuildParams {
+impl InitializeBuild {
     pub fn new<S: Into<String>>(
         display_name: S,
         version: S,

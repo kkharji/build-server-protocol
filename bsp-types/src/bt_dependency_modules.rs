@@ -2,16 +2,16 @@ use super::BuildTargetIdentifier;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-/// The build target dependency modules request is sent from the client to the server to query for
-/// the libraries of build target dependencies that are external to the workspace including meta
+/// The build target dependency modules request is sent from the client to the server to query
+/// for the libraries of build target dependencies that are external to the workspace including meta
 /// information about library and their sources. It's an extended version of buildTarget/sources.
-#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BuildTargetDependencyModule {
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct BuildTargetDependencyModules {
     /// The build targets to clean.
     targets: Vec<BuildTargetIdentifier>,
 }
 
-impl BuildTargetDependencyModule {
+impl BuildTargetDependencyModules {
     /// Get a reference to the bsp btclean cache params's targets.
     pub fn targets(&self) -> &[BuildTargetIdentifier] {
         self.targets.as_ref()
@@ -33,34 +33,34 @@ impl BuildTargetDependencyModule {
 }
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BuildTargetDependencyModuleResult {
-    items: Vec<BTDependencyModulesItem>,
+pub struct BuildTargetDependencyModulesResult {
+    items: Vec<DependencyModulesItem>,
 }
 
-impl BuildTargetDependencyModuleResult {
-    pub fn new(items: Vec<BTDependencyModulesItem>) -> Self {
+impl BuildTargetDependencyModulesResult {
+    pub fn new(items: Vec<DependencyModulesItem>) -> Self {
         Self { items }
     }
 
     /// Get a reference to the bsp btdependency modules result's items.
-    pub fn items(&self) -> &[BTDependencyModulesItem] {
+    pub fn items(&self) -> &[DependencyModulesItem] {
         self.items.as_ref()
     }
 
     /// Get a mutable reference to the bsp btdependency modules result's items.
-    pub fn items_mut(&mut self) -> &mut Vec<BTDependencyModulesItem> {
+    pub fn items_mut(&mut self) -> &mut Vec<DependencyModulesItem> {
         &mut self.items
     }
 }
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BTDependencyModulesItem {
+pub struct DependencyModulesItem {
     target: BuildTargetIdentifier,
-    modules: Vec<BTDependencyModule>,
+    modules: Vec<DependencyModule>,
 }
 
-impl BTDependencyModulesItem {
-    pub fn new(target: BuildTargetIdentifier, modules: Vec<BTDependencyModule>) -> Self {
+impl DependencyModulesItem {
+    pub fn new(target: BuildTargetIdentifier, modules: Vec<DependencyModule>) -> Self {
         Self { target, modules }
     }
 
@@ -70,19 +70,19 @@ impl BTDependencyModulesItem {
     }
 
     /// Set the bsp btdependency modules item's modules.
-    pub fn set_modules(&mut self, modules: Vec<BTDependencyModule>) {
+    pub fn set_modules(&mut self, modules: Vec<DependencyModule>) {
         self.modules = modules;
     }
 
     /// Get a reference to the bsp btdependency modules item's modules.
-    pub fn modules(&self) -> &[BTDependencyModule] {
+    pub fn modules(&self) -> &[DependencyModule] {
         self.modules.as_ref()
     }
 }
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
-pub struct BTDependencyModule {
+pub struct DependencyModule {
     /// Module name
     name: String,
 
@@ -93,11 +93,11 @@ pub struct BTDependencyModule {
     data_kind: Option<String>,
 
     /// Language-specific metadata about this module.
-    ///    * See https://github.com/build-server-protocol/build-server-protocol/blob/master/bsp4j/src/main/java/ch/epfl/scala/bsp4j/MavenExtension.xtend
+    ///    * See <https://github.com/build-server-protocol/build-server-protocol/blob/master/bsp4j/src/main/java/ch/epfl/scala/bsp4j/MavenExtension.xtend>
     data: Option<Value>,
 }
 
-impl BTDependencyModule {
+impl DependencyModule {
     pub fn new(
         name: String,
         version: String,

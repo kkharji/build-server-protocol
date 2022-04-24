@@ -43,7 +43,7 @@ impl BuildTargetEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum BuildTargetEventKind {
-    /// The build target is new [default].
+    /// The build target is new (default).
     Created = 1,
     /// The build target has changed.
     Changed = 2,

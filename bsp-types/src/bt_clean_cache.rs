@@ -10,7 +10,7 @@ use super::BuildTargetIdentifier;
 /// Stateless build tools are free to ignore the request and respond with a successful response.
 /// Stateful build tools must ensure that invoking compilation on a target that has been cleaned
 /// results in a full compilation.
-#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct BuildTargetCleanCache {
     /// The build targets to clean.
     targets: Vec<BuildTargetIdentifier>,

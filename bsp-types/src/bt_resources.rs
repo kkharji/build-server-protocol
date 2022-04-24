@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 /// method is supported or not.
 ///
 /// This request can be used by a client to highlight the resources in a project view, for example.
-#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct BuildTargetResources {
     targets: Vec<BuildTargetIdentifier>,
 }
@@ -36,33 +36,33 @@ impl BuildTargetResources {
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub struct BuildTargetResourcesResult {
-    items: Vec<BTResourcesItem>,
+    items: Vec<Resources>,
 }
 
 impl BuildTargetResourcesResult {
-    pub fn new(items: Vec<BTResourcesItem>) -> Self {
+    pub fn new(items: Vec<Resources>) -> Self {
         Self { items }
     }
 
     /// Get a reference to the bsp resources result's items.
-    pub fn items(&self) -> &[BTResourcesItem] {
+    pub fn items(&self) -> &[Resources] {
         self.items.as_ref()
     }
 
     /// Get a mutable reference to the bsp resources result's items.
-    pub fn items_mut(&mut self) -> &mut Vec<BTResourcesItem> {
+    pub fn items_mut(&mut self) -> &mut Vec<Resources> {
         &mut self.items
     }
 }
 
 #[derive(Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct BTResourcesItem {
+pub struct Resources {
     target: BuildTargetIdentifier,
     /// List of resource files.
     resources: Vec<String>,
 }
 
-impl BTResourcesItem {
+impl Resources {
     pub fn new(target: BuildTargetIdentifier, resources: Vec<String>) -> Self {
         Self { target, resources }
     }

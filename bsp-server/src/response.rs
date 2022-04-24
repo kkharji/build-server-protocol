@@ -1,4 +1,4 @@
-use crate::{ErrorCode, RequestId};
+use crate::{ErrorCode, Message, RequestId};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -87,3 +87,39 @@ impl Response {
         Self::err(id, ErrorCode::ServerCancelled as i32 as i32, message)
     }
 }
+
+impl From<Response> for Message {
+    fn from(response: Response) -> Message {
+        Message::Response(response)
+    }
+}
+
+impl From<(RequestId, String)> for Message {
+    fn from(v: (RequestId, String)) -> Message {
+        Message::Response(Response::ok(v.0, v.1))
+    }
+}
+
+macro_rules! convertible {
+    ($type:path) => {
+        impl From<(RequestId, $type)> for Message {
+            fn from(v: (RequestId, $type)) -> Message {
+                Message::Response(Response::ok(v.0, v.1))
+            }
+        }
+    };
+}
+
+convertible!(bsp_types::InitializeBuildResult);
+convertible!(bsp_types::WorkspaceBuildTargetsResult);
+convertible!(serde_json::Value);
+convertible!(bsp_types::DebugSessionStartResult);
+convertible!(bsp_types::BuildTargetSourcesResult);
+convertible!(bsp_types::BuildTargetTestResult);
+convertible!(bsp_types::BuildTargetRunResult);
+convertible!(bsp_types::BuildTargetCompileResult);
+convertible!(bsp_types::BuildTargetResourcesResult);
+convertible!(bsp_types::BuildTargetDependencyModulesResult);
+convertible!(bsp_types::BuildTargetCleanCacheResult);
+convertible!(bsp_types::BuildTargetInverseSourcesResult);
+convertible!(bsp_types::BuildTargetDependencySourcesResult);
