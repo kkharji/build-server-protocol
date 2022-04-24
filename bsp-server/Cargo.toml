@@ -1,6 +1,6 @@
 [package]
 name = "bsp-server"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 description = "Build Server Protocol (Server)"
 repository = "https://github.com/tami5/build-server-protocol"
@@ -12,5 +12,5 @@ crossbeam-channel     = { version = "0.5.4" }
 serde                 = { version = "1.0", features = ["derive"]  }
 serde_json            = { version = "1.0.79" }
 tracing               = { version = "0.1.34"  }
-bsp-types             = { version = "0.1", path = "../bsp-types" }
+bsp-types             = { version = "0.1.2", path = "../bsp-types" }
 serde_repr            = { version = "0.1.7" }
