@@ -95,8 +95,8 @@ impl InitializeBuild {
     }
 
     /// Get a reference to the bsp initialize build params's root uri.
-    pub fn root_uri(&self) -> &str {
-        self.root_uri.as_ref()
+    pub fn root_uri(&self) -> &Url {
+        &self.root_uri
     }
 
     /// Get a reference to the bsp initialize build params's root uri.
