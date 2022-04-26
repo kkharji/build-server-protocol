@@ -35,12 +35,12 @@ impl Message {
             None => return Ok(None),
         };
         let msg = serde_json::from_str(&text)?;
-        tracing::debug!("Got <<<<<<<<<<<<<<<<<<<<<<<<<\n\n{:#?}\n", msg);
+        tracing::trace!("Got <<<<<<<<<<<<<<<<<<<<<<<<<\n\n{:#?}\n", msg);
         Ok(Some(msg))
     }
 
     pub(crate) fn write(self, w: &mut dyn io::Write) -> io::Result<()> {
-        tracing::debug!("Sent >>>>>>>>>>>>>>>>>>>>>>>>>\n\n{:#?}\n", self);
+        tracing::trace!("Sent >>>>>>>>>>>>>>>>>>>>>>>>>\n\n{:#?}\n", self);
         let msg = serde_json::to_string(&JsonRpc::from(self))?;
         write!(w, "Content-Length: {}\r\n\r\n", msg.len())?;
         w.write_all(msg.as_bytes())?;
