@@ -1,7 +1,14 @@
 # Build Server Protocol
 
-State: Working, Unstable, feature releases might break 0.1
+State: Working, Unstable
 [Build Server Protocol](https://build-server-protocol.github.io/docs/specification.html) client, server and type definition in rust.
+## Install 
+
+```
+bsp-server = "0.1.3"
+# OR if you want just types
+bsp-types = "0.1.3"
+```
 
 ## Example 
 
