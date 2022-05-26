@@ -52,6 +52,7 @@ pub enum Request {
 }
 
 impl Request {
+    /// Get request method
     pub fn method(&self) -> &'static str {
         use Request::*;
         match self {
@@ -73,6 +74,7 @@ impl Request {
         }
     }
 
+    /// Get request id
     pub fn id(&self) -> &RequestId {
         use Request::*;
         match self {
@@ -92,6 +94,28 @@ impl Request {
             | BuildTargetCleanCache(id, _)
             | Custom(id, _, _) => id,
         }
+    }
+
+    /// Get request params
+    pub fn params(&self) -> anyhow::Result<Value> {
+        use Request::*;
+        let value = match self {
+            Shutdown(_) | WorkspaceBuildTargets(_) | WorkspaceReload(_) => return Ok(Value::Null),
+            InitializeBuild(_, ref params) => serde_json::to_value(params),
+            BuildTargetDependencyModules(_, ref params) => serde_json::to_value(params),
+            DebugSessionStart(_, ref params) => serde_json::to_value(params),
+            BuildTargetSources(_, ref params) => serde_json::to_value(params),
+            TextDocumentInverseSources(_, ref params) => serde_json::to_value(params),
+            BuildTargetDependencySources(_, ref params) => serde_json::to_value(params),
+            BuildTargetResources(_, ref params) => serde_json::to_value(params),
+            BuildTargetRun(_, ref params) => serde_json::to_value(params),
+            BuildTargetCompile(_, ref params) => serde_json::to_value(params),
+            BuildTargetTest(_, ref params) => serde_json::to_value(params),
+            BuildTargetCleanCache(_, ref params) => serde_json::to_value(params),
+            Custom(_, ref params, _) => serde_json::to_value(params),
+        };
+
+        Ok(value?)
     }
 }
 
